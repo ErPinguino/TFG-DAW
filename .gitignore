@@ -1,0 +1,27 @@
+# Entorno Virtual
+venv/
+ENV/
+env/
+
+# Python (Archivos compilados)
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Base de Datos (SQLite)
+# Es mejor que cada uno tenga su propia base de datos local para pruebas
+*.db
+*.sqlite3
+
+# Variables de entorno / Secretos
+.env
+
+# IDEs (Configuraciones de Visual Studio Code o PyCharm)
+.vscode/
+.idea/
+
+# Distribución / Paquetes
+dist/
+build/
+*.egg-info/

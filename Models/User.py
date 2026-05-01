@@ -2,9 +2,9 @@ from sqlalchemy import Column, Integer, String, Float, Boolean
 from sqlalchemy.orm import declarative_base, relationship
 from pydantic import BaseModel, Field, conint, EmailStr
 from typing import Optional
+from database import Base
 
 #ORM part
-Base = declarative_base()
 class UserORM(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key = True, index = True, autoincrement = True)

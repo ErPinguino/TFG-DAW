@@ -2,10 +2,8 @@ from sqlalchemy import Column, Integer, String, Float, Boolean
 from sqlalchemy.orm import declarative_base, relationship
 from pydantic import BaseModel, Field, conint
 from typing import Optional
-
+from database import Base
 #Parte ORM
-
-Base = declarative_base()
 
 class GameORM(Base):
     __tablename__ = 'games'
