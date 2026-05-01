@@ -1,6 +1,6 @@
 # GameStore API
 
-> Backend modular para un e-commerce de videojuegos · Python 3.14 · FastAPI · SQLAlchemy · SQLite · Bcrypt
+> Backend modular para un e-commerce de videojuegos · Python 3.14 · FastAPI · SQLAlchemy · SQLite · JWT · Passlib
 
 ---
 
@@ -9,10 +9,10 @@
 1. [Descripción del Proyecto](#descripción-del-proyecto)
 2. [Stack Tecnológico](#stack-tecnológico)
 3. [Estructura del Proyecto](#estructura-del-proyecto)
-4. [Configuración del Entorno](#configuración-del-entorno)
+4. [Configuración del Entorno (.env)](#configuración-del-entorno-env)
 5. [Ejecutar el Servidor](#ejecutar-el-servidor)
 6. [Endpoints de la API](#endpoints-de-la-api)
-7. [Seguridad](#seguridad)
+7. [Seguridad y Autenticación](#seguridad-y-autenticación)
 8. [Base de Datos](#base-de-datos)
 9. [Quick Start](#quick-start)
 
@@ -20,49 +20,51 @@
 
 ## Descripción del Proyecto
 
-**GameStore API** es un backend modular diseñado para gestionar una tienda de videojuegos online. Construido con **FastAPI** y siguiendo una arquitectura limpia por capas, proporciona:
+**GameStore API** es un backend modular diseñado para gestionar una tienda de videojuegos online. Construido con **FastAPI** y siguiendo una arquitectura limpia por capas, esta versión avanzada proporciona:
 
-- Autenticación segura de usuarios con hashing de contraseñas
-- Gestión completa del catálogo de juegos (CRUD)
-- Persistencia con SQLite, generada automáticamente en el primer arranque
-- Documentación interactiva integrada (Swagger UI)
+- **Seguridad Robusta**: Hashing de contraseñas con Passlib (Bcrypt) y protección de rutas mediante Bearer Tokens (JWT).
+- **Gestión de Carrito**: Sistema completo de persistencia para el carrito de compras ligado a usuarios autenticados.
+- **Configuración Segura**: Manejo de claves y variables críticas mediante archivos de entorno.
+- **Soporte Frontend**: Configuración de CORS lista para la integración con clientes modernos (Vite/React).
 
 ---
 
 ## Stack Tecnológico
 
-| Tecnología | Versión  | Propósito                                    |
+| Tecnología | Versión | Propósito |
 |------------|----------|----------------------------------------------|
-| Python     | 3.14     | Lenguaje principal                           |
-| FastAPI    | Latest   | Framework web ASGI de alto rendimiento       |
-| SQLAlchemy | Latest   | ORM — modelos y abstracción de base de datos |
-| SQLite     | Built-in | Base de datos relacional local (archivo)     |
-| Bcrypt     | Latest   | Hashing seguro de contraseñas                |
-| Pydantic   | v2       | Validación de esquemas y serialización       |
-| Uvicorn    | Latest   | Servidor ASGI con soporte hot-reload         |
+| Python | 3.14 | Lenguaje principal |
+| FastAPI | Latest | Framework web ASGI de alto rendimiento |
+| SQLAlchemy | Latest | ORM — modelos y abstracción de base de datos |
+| SQLite | Built-in | Base de datos relacional local (archivo) |
+| Passlib | v1.7.4 | Gestión profesional de hashing (Bcrypt) |
+| PyJWT | v2.8.0 | Generación y validación de tokens JWT |
+| python-dotenv | Latest | Carga de variables de entorno desde `.env` |
+| Uvicorn | Latest | Servidor ASGI con soporte hot-reload |
 
 ---
 
 ## Estructura del Proyecto
-
 ```
 TFG-DAW/
 ├── Models/
-│   ├── __init__.py
 │   ├── game.py          # GameORM + esquemas Pydantic
-│   └── user.py          # UserORM + esquemas Pydantic
+│   ├── user.py          # UserORM + esquemas Pydantic
+│   └── cart.py          # CartORM y CartItemORM
 ├── Routes/
-│   ├── __init__.py
 │   ├── game_routes.py   # Endpoints /games
-│   └── user_routes.py   # Endpoints /auth
+│   ├── user_routes.py   # Endpoints /auth (Login/Register)
+│   └── cart_routes.py   # Endpoints /cart (Protegidos)
 ├── Services/
-│   ├── __init__.py
-│   ├── game_service.py  # Lógica de negocio de juegos
-│   └── user_service.py  # Lógica de autenticación
+│   ├── game_service.py  # Lógica de catálogo
+│   ├── user_service.py  # Gestión de usuarios y hashing
+│   ├── auth_service.py  # Validación JWT y dependencias
+│   └── cart_service.py  # Lógica del carrito de compra
+├── .env                 # Variables sensibles (No incluido en Git)
 ├── database.py          # Motor SQLAlchemy + get_db()
-├── main.py              # Entrada principal + inicialización DB
-├── gamestore.db         # SQLite (generado automáticamente)
-└── venv/                # Entorno virtual
+├── main.py              # Entrada principal + Middleware CORS
+├── requirements.txt     # Listado de dependencias del proyecto
+└── gamestore.db         # SQLite (generado automáticamente)
 ```
 
 ### Responsabilidades por Capa
@@ -77,6 +79,14 @@ TFG-DAW/
 ---
 
 ## Configuración del Entorno
+
+### 0. ENV
+
+Por seguridad, las claves de cifrado no están hardcodeadas. Debes crear un archivo llamado `.env` en la raíz del proyecto con el siguiente formato:
+```env
+SECRET_KEY=tu_clave_secreta_super_aleatoria_2026
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=60
 
 ### 1. Crear el entorno virtual
 
@@ -99,7 +109,7 @@ source venv/bin/activate
 ### 3. Instalar dependencias
 
 ```bash
-pip install fastapi uvicorn[standard] sqlalchemy pydantic email-validator bcrypt
+pip install -r requirements.txt
 ```
 
 ---
@@ -141,25 +151,51 @@ En el primer arranque, `main.py` ejecuta `Base.metadata.create_all()` y crea aut
 | PUT    | `/games/{id}` | Actualiza un juego existente         |
 | DELETE | `/games/{id}` | Elimina un juego del catálogo        |
 
+### Carrito de compra — `/cart` (Requiere token)
+| Método | Ruta          | Descripción                          |
+|--------|---------------|--------------------------------------|
+| GET    | `/cart/`      | Obtiene el carrito del usuario autenticado |
+| POST   | `/cart/add`   | Añade un juego al carrito            |
+| DELETE | `/cart/remove/{id}` | Elimina un juego del carrito   |
+| DELETE | `/cart/clear` | Vacía el carrito                     |
+
+
+
+
 ---
 
 ## Seguridad
 
-Las contraseñas se gestionan exclusivamente como hashes bcrypt. El texto plano nunca se almacena ni se registra en logs.
+Hashing de Contraseñas
+Se utiliza passlib con el algoritmo bcrypt para transformar las contraseñas en hashes irreversibles. El texto plano nunca se persiste.
+
+Protección de Rutas (JWT)
+El cliente se autentica en /auth/login.
+
+El servidor genera un token firmado con la SECRET_KEY.
+
+El cliente debe incluir este token en la cabecera de las peticiones protegidas:
+Authorization: Bearer <TOKEN>
 
 ### Flujo de Registro
 
-1. El cliente envía username, email y contraseña en texto plano
-2. La capa de servicio hashea la contraseña con `bcrypt`
-3. Solo el hash se persiste en la tabla `users`
-4. La contraseña original se descarta inmediatamente
+Validación Previa: El servicio comprueba si el email o el username ya existen en la base de datos para evitar duplicados.
+
+Hashing: La capa de servicio hashea la contraseña utilizando passlib (con el motor bcrypt).
+
+Persistencia: Se crea el nuevo registro en la tabla users almacenando únicamente el hash generado.
+
+Limpieza: La contraseña en texto plano se descarta inmediatamente y nunca sale de la memoria volátil del servidor.
 
 ### Flujo de Login
 
-1. El cliente envía username y contraseña en texto plano
-2. El servicio recupera el hash almacenado para ese usuario
-3. `bcrypt.checkpw()` compara el texto plano contra el hash (resistente a timing attacks)
-4. La autenticación se acepta o rechaza — sin implementación de token en la versión actual
+dentificación: El cliente envía sus credenciales (email/password) en texto plano.
+
+Verificación: El servicio recupera el hash del usuario y utiliza pwd_context.verify() para comparar la contraseña de forma segura (protegiendo el sistema contra timing attacks).
+
+Generación de Token: Si las credenciales son válidas, el auth_service genera un JSON Web Token (JWT) firmado con la clave secreta del servidor.
+
+Respuesta: El servidor devuelve un objeto con el access_token y el tipo de token (bearer), permitiendo al cliente acceder a las rutas protegidas (como el carrito).
 
 ---
 
@@ -188,6 +224,24 @@ El proyecto usa **SQLite** como base de datos local sin configuración adicional
 | `stock`       | INTEGER | Cantidad disponible           |
 | `description` | TEXT    | Descripción opcional          |
 
+**Tabla `carts`**
+
+| Columna       | Tipo    | Notas                         |
+|---------------|---------|-------------------------------|
+| `id`          | INTEGER | Clave primaria, autoincrement |
+| `user_id`     | INTEGER | Clave foránea, a quien pertenece |
+
+**Tabla `cart_items`**
+
+| Columna       | Tipo    | Notas                         |
+|---------------|---------|-------------------------------|
+| `id`          | INTEGER | Clave primaria, autoincrement |
+| `cart_id`     | INTEGER | Clave foránea, a qué carrito pertenece |
+| `game_id`     | INTEGER | Clave foránea, qué juego es   |
+| `quantity`    | INTEGER | Cantidad   |
+
+
+
 ---
 
 ## Quick Start
@@ -203,7 +257,7 @@ python -m venv venv
 # source venv/bin/activate     # Unix/macOS
 
 # 3. Instalar dependencias
-pip install fastapi uvicorn[standard] sqlalchemy pydantic email-validator bcrypt
+pip install -r requirements.txt
 
 # 4. Arrancar el servidor
 uvicorn main:app --reload
