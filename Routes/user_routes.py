@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from database import get_db
 from Models.user import UserBase, UserPublicResponse
 from Services import user_service
+from Services import auth_service
 
 router = APIRouter(
     prefix="/auth",
@@ -27,4 +28,12 @@ def login(user_credentials: UserBase, db: Session = Depends(get_db)):
     if not is_valid:
         raise HTTPException(status_code=401, detail="Contraseña incorrecta")
     
-    return {"mensaje": "Login exitoso", "username": user.username}
+    # --- LA MAGIA DEL JWT ---
+    # Guardamos el ID del usuario dentro del token
+    access_token = auth_service.create_access_token(data={"sub": str(user.id)})
+    
+    return {
+        "access_token": access_token, 
+        "token_type": "bearer",
+        "username": user.username
+    }
