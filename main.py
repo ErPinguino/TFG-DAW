@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from database import engine, Base
-from Models import game, user 
-from Routes import game_routes, user_routes, cart_routes
+from Models import game, user, cart, order
+from Routes import game_routes, order_routes, user_routes, cart_routes
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
@@ -31,6 +31,7 @@ Base.metadata.create_all(bind=engine)
 app.include_router(game_routes.router)
 app.include_router(user_routes.router)
 app.include_router(cart_routes.router)
+app.include_router(order_routes.router)
 
 @app.get("/")
 def read_root():

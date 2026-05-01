@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from database import get_db
 from Models.user import UserBase, UserPublicResponse
@@ -19,21 +20,20 @@ def register(user: UserBase, db: Session = Depends(get_db)):
     return user_service.create_user(db, user)
 
 @router.post("/login")
-def login(user_credentials: UserBase, db: Session = Depends(get_db)):
-    user = user_service.get_user_by_email(db, user_credentials.email)
+def login(
+    db: Session = Depends(get_db), 
+    form_data: OAuth2PasswordRequestForm = Depends(OAuth2PasswordRequestForm)):
+    # El usuario ahora se busca en form_data.username
+    user = auth_service.authenticate_user(db, form_data.username, form_data.password)
+    
     if not user:
-        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Usuario o contraseña incorrectos",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
     
-    is_valid = user_service.verify_password(user_credentials.password, user.hashed_password)
-    if not is_valid:
-        raise HTTPException(status_code=401, detail="Contraseña incorrecta")
-    
-    # --- LA MAGIA DEL JWT ---
-    # Guardamos el ID del usuario dentro del token
+    # Creamos el token (asegúrate de que tu auth_service devuelva el token)
     access_token = auth_service.create_access_token(data={"sub": str(user.id)})
     
-    return {
-        "access_token": access_token, 
-        "token_type": "bearer",
-        "username": user.username
-    }
+    return {"access_token": access_token, "token_type": "bearer"}

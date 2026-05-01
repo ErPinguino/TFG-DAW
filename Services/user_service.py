@@ -11,6 +11,9 @@ def get_user_by_email(db: Session, email: str):
 def get_user_by_username(db: Session, username: str):
     return db.query(UserORM).filter(UserORM.username == username).first()
 
+def get_user_by_id(db: Session, user_id: int):
+    return db.query(UserORM).filter(UserORM.id == user_id).first()
+
 def create_user(db: Session, user_data: UserBase):
     db_user = get_user_by_email(db, user_data.email)
     if db_user:
