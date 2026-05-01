@@ -194,7 +194,7 @@ El proyecto usa **SQLite** como base de datos local sin configuración adicional
 
 ```bash
 # 1. Clonar el repositorio
-git clone <url-del-repositorio>
+git clone https://github.com/ErPinguino/TFG-DAW.git
 cd TFG-DAW
 
 # 2. Crear y activar el entorno virtual
