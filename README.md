@@ -80,13 +80,13 @@ TFG-DAW/
 
 ## Configuración del Entorno
 
-### 0. ENV
 
 Por seguridad, las claves de cifrado no están hardcodeadas. Debes crear un archivo llamado `.env` en la raíz del proyecto con el siguiente formato:
 ```env
 SECRET_KEY=tu_clave_secreta_super_aleatoria_2026
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=60
+```
 
 ### 1. Crear el entorno virtual
 
