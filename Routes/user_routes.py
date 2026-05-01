@@ -23,7 +23,6 @@ def register(user: UserBase, db: Session = Depends(get_db)):
 def login(
     db: Session = Depends(get_db), 
     form_data: OAuth2PasswordRequestForm = Depends(OAuth2PasswordRequestForm)):
-    # El usuario ahora se busca en form_data.username
     user = auth_service.authenticate_user(db, form_data.username, form_data.password)
     
     if not user:

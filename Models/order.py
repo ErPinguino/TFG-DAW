@@ -12,7 +12,7 @@ class OrderORM(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     total_price = Column(Float, nullable=False)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
-    status = Column(String, default="completed") # completed, pending, cancelled
+    status = Column(String, default="completed")
 
     user = relationship("UserORM")
     items = relationship("OrderItemORM", back_populates="order")
@@ -38,7 +38,6 @@ class OrderItemResponse(BaseModel):
     @model_validator(mode='before') 
     @classmethod
     def get_title_from_relationship(cls, data):
-        # Verificamos si tiene la relación 'game' cargada
         if hasattr(data, "game") and data.game:
             setattr(data, "game_title", data.game.title)
         return data
