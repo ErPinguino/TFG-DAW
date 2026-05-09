@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Registro | GameStore</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-slate-900 text-white min-h-screen flex items-center justify-center px-6">
+
+    <!-- =========================
+         REGISTER CARD
+    ========================== -->
+
+    <div class="bg-slate-800 w-full max-w-md p-10 rounded-3xl shadow-2xl">
+
+        <!-- LOGO -->
+
+        <div class="text-center mb-10">
+
+            <h1 class="text-5xl font-bold text-blue-400 mb-4">
+
+                GameStore
+
+            </h1>
+
+            <p class="text-gray-400 text-lg">
+
+                Crea tu cuenta para comenzar
+
+            </p>
+
+        </div>
+
+        <!-- ERROR -->
+
+        <div id="errorBox"
+            class="hidden bg-red-500 text-white p-4 rounded-xl mb-6 text-center">
+
+        </div>
+
+        <!-- SUCCESS -->
+
+        <div id="successBox"
+            class="hidden bg-green-500 text-white p-4 rounded-xl mb-6 text-center">
+
+        </div>
+
+        <!-- FORM -->
+
+        <form id="registerForm"
+            class="space-y-6">
+
+            <!-- USERNAME -->
+
+            <div>
+
+                <label class="block mb-2 text-lg">
+
+                    Nombre de usuario
+
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    required
+                    minlength="3"
+                    class="w-full p-4 rounded-xl bg-slate-700 border border-slate-600 focus:outline-none focus:border-blue-500">
+
+            </div>
+
+            <!-- EMAIL -->
+
+            <div>
+
+                <label class="block mb-2 text-lg">
+
+                    Email
+
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    required
+                    class="w-full p-4 rounded-xl bg-slate-700 border border-slate-600 focus:outline-none focus:border-blue-500">
+
+            </div>
+
+            <!-- PASSWORD -->
+
+            <div>
+
+                <label class="block mb-2 text-lg">
+
+                    Contraseña
+
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    required
+                    minlength="8"
+                    class="w-full p-4 rounded-xl bg-slate-700 border border-slate-600 focus:outline-none focus:border-blue-500">
+
+            </div>
+
+            <!-- BUTTON -->
+
+            <button
+                type="submit"
+                id="registerButton"
+                class="w-full bg-blue-500 hover:bg-blue-600 transition py-4 rounded-xl text-xl font-bold">
+
+                Crear cuenta
+
+            </button>
+
+        </form>
+
+        <!-- LOGIN -->
+
+        <div class="text-center mt-8">
+
+            <p class="text-gray-400">
+
+                ¿Ya tienes cuenta?
+
+            </p>
+
+            <a href="login.html"
+                class="text-blue-400 hover:underline text-lg">
+
+                Iniciar sesión
+
+            </a>
+
+        </div>
+
+        <!-- HOME -->
+
+        <div class="text-center mt-8">
+
+            <a href="index.html"
+                class="text-gray-400 hover:text-white transition">
+
+                ← Volver al inicio
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- =========================
+         SCRIPT
+    ========================== -->
+
+    <script>
+
+        /* =========================
+           API
+        ========================== */
+
+        const API_URL =
+            "http://127.0.0.1:8000/auth/register";
+
+        /* =========================
+           ELEMENTOS
+        ========================== */
+
+        const registerForm =
+            document.getElementById("registerForm");
+
+        const errorBox =
+            document.getElementById("errorBox");
+
+        const successBox =
+            document.getElementById("successBox");
+
+        const registerButton =
+            document.getElementById("registerButton");
+
+        /* =========================
+           REGISTER
+        ========================== */
+
+        registerForm.addEventListener("submit", async (e) => {
+
+            e.preventDefault();
+
+            errorBox.classList.add("hidden");
+
+            successBox.classList.add("hidden");
+
+            registerButton.disabled = true;
+
+            registerButton.textContent =
+                "Creando cuenta...";
+
+            const username =
+                document.getElementById("username").value;
+
+            const email =
+                document.getElementById("email").value;
+
+            const password =
+                document.getElementById("password").value;
+
+            try {
+
+                const respuesta =
+                    await fetch(API_URL, {
+
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+
+                            username,
+                            email,
+                            password
+
+                        })
+
+                    });
+
+                const data =
+                    await respuesta.json();
+
+                /* =========================
+                   ERROR API
+                ========================== */
+
+                if (!respuesta.ok) {
+
+                    throw new Error(
+                        data.detail ||
+                        "Error al crear cuenta"
+                    );
+
+                }
+
+                /* =========================
+                   SUCCESS
+                ========================== */
+
+                successBox.textContent =
+                    "Cuenta creada correctamente";
+
+                successBox.classList.remove("hidden");
+
+                registerForm.reset();
+
+                /* =========================
+                   REDIRECT LOGIN
+                ========================== */
+
+                setTimeout(() => {
+
+                    window.location.href =
+                        "login.html";
+
+                }, 2000);
+
+            } catch (error) {
+
+                console.error(error);
+
+                errorBox.textContent =
+                    error.message;
+
+                errorBox.classList.remove("hidden");
+
+            } finally {
+
+                registerButton.disabled = false;
+
+                registerButton.textContent =
+                    "Crear cuenta";
+
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>

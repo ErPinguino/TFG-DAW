@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Login | GameStore</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-slate-900 text-white min-h-screen flex items-center justify-center px-6">
+
+    <!-- =========================
+         LOGIN CARD
+    ========================== -->
+
+    <div class="bg-slate-800 w-full max-w-md p-10 rounded-3xl shadow-2xl">
+
+        <!-- LOGO -->
+
+        <div class="text-center mb-10">
+
+            <h1 class="text-5xl font-bold text-blue-400 mb-4">
+
+                GameStore
+
+            </h1>
+
+            <p class="text-gray-400 text-lg">
+
+                Inicia sesión para continuar
+
+            </p>
+
+        </div>
+
+        <!-- ERROR -->
+
+        <div id="errorBox"
+            class="hidden bg-red-500 text-white p-4 rounded-xl mb-6 text-center">
+
+        </div>
+
+        <!-- FORM -->
+
+        <form id="loginForm"
+            class="space-y-6">
+
+            <!-- EMAIL / USERNAME -->
+
+            <div>
+
+                <label class="block mb-2 text-lg">
+
+                    Usuario o email
+
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    required
+                    class="w-full p-4 rounded-xl bg-slate-700 border border-slate-600 focus:outline-none focus:border-blue-500">
+
+            </div>
+
+            <!-- PASSWORD -->
+
+            <div>
+
+                <label class="block mb-2 text-lg">
+
+                    Contraseña
+
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    required
+                    class="w-full p-4 rounded-xl bg-slate-700 border border-slate-600 focus:outline-none focus:border-blue-500">
+
+            </div>
+
+            <!-- BOTÓN -->
+
+            <button
+                type="submit"
+                id="loginButton"
+                class="w-full bg-blue-500 hover:bg-blue-600 transition py-4 rounded-xl text-xl font-bold">
+
+                Iniciar sesión
+
+            </button>
+
+        </form>
+
+        <!-- REGISTER -->
+
+        <div class="text-center mt-8">
+
+            <p class="text-gray-400">
+
+                ¿No tienes cuenta?
+
+            </p>
+
+            <a href="register.html"
+                class="text-blue-400 hover:underline text-lg">
+
+                Crear cuenta
+
+            </a>
+
+        </div>
+
+        <!-- VOLVER -->
+
+        <div class="text-center mt-8">
+
+            <a href="index.html"
+                class="text-gray-400 hover:text-white transition">
+
+                ← Volver al inicio
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- =========================
+         SCRIPT
+    ========================== -->
+
+    <script>
+
+        /* =========================
+           API
+        ========================== */
+
+        const API_URL =
+            "http://127.0.0.1:8000/auth/login";
+
+        /* =========================
+           ELEMENTOS
+        ========================== */
+
+        const loginForm =
+            document.getElementById("loginForm");
+
+        const errorBox =
+            document.getElementById("errorBox");
+
+        const loginButton =
+            document.getElementById("loginButton");
+
+        /* =========================
+           LOGIN
+        ========================== */
+
+        loginForm.addEventListener("submit", async (e) => {
+
+            e.preventDefault();
+
+            errorBox.classList.add("hidden");
+
+            loginButton.disabled = true;
+
+            loginButton.textContent =
+                "Iniciando sesión...";
+
+            const username =
+                document.getElementById("username").value;
+
+            const password =
+                document.getElementById("password").value;
+
+            try {
+
+                /* ==================================
+                   OAuth2PasswordRequestForm
+                ================================== */
+
+                const formData =
+                    new URLSearchParams();
+
+                formData.append("username", username);
+
+                formData.append("password", password);
+
+                const respuesta =
+                    await fetch(API_URL, {
+
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/x-www-form-urlencoded"
+                        },
+
+                        body: formData
+
+                    });
+
+                const data =
+                    await respuesta.json();
+
+                /* ==================================
+                   ERROR LOGIN
+                ================================== */
+
+                if (!respuesta.ok) {
+
+                    throw new Error(
+                        data.detail ||
+                        "Error al iniciar sesión"
+                    );
+
+                }
+
+                /* ==================================
+                   GUARDAR TOKEN
+                ================================== */
+
+                localStorage.setItem(
+                    "token",
+                    data.access_token
+                );
+
+                /* ==================================
+                   LOGIN OK
+                ================================== */
+
+                alert("Login correcto");
+
+                window.location.href =
+                    "catalogo.html";
+
+            } catch (error) {
+
+                console.error(error);
+
+                errorBox.textContent =
+                    error.message;
+
+                errorBox.classList.remove("hidden");
+
+            } finally {
+
+                loginButton.disabled = false;
+
+                loginButton.textContent =
+                    "Iniciar sesión";
+
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>
