@@ -29,9 +29,9 @@ class GameBase(BaseModel):
     genre: str = Field(..., max_length=50, description="Genre of the game")
     platform: str = Field(..., description="Platform of the game")
     price : float = Field(..., gt=0, description="Price of the game")
-    release_year: Optional[conint(ge=1970, lt=2100)] = None
+    release_year: Optional[int] = Field(None, ge=1970, lt=2100)
     multiplayer: bool = False
-    stock: Optional[conint(ge=0, lt=100)] = None
+    stock: Optional[int] = Field(None, ge=0, lt=1000)
 
 #Output DTO
 
@@ -50,9 +50,9 @@ class GameUpate(BaseModel):
     genre: Optional[str] = None
     platform: Optional[str] = None
     price : Optional[float] = None
-    release_year: Optional[conint(ge=1970, lt=2100)] = None
+    release_year: Optional[int] = Field(None, ge=1970, lt=2100)
     multiplayer: Optional[bool] = None
-    stock: Optional[conint(ge=0, lt=100)] = None
+    stock: Optional[int] = Field(None, ge=0, lt=1000)
 
     class Config:
         from_attributes = True

@@ -1,7 +1,9 @@
 from fastapi import FastAPI
+from Models import cart, game, order
+from Routes import cart_routes, game_routes, order_routes
 from database import engine, Base
-from Models import game, user, cart, order
-from Routes import game_routes, order_routes, user_routes, cart_routes
+from Models import user
+from Routes import user_routes
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
