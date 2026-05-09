@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8" />
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0" />
+
+    <title>Catálogo | GameStore</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-slate-900 text-white">
+
+    <!-- =========================
+         NAVBAR
+    ========================== -->
+
+    <nav class="bg-slate-800 p-4 sticky top-0 z-50 shadow-xl">
+
+        <div class="container mx-auto flex justify-between items-center">
+
+            <h1 class="text-3xl font-bold text-blue-400">
+                GameStore
+            </h1>
+
+            <ul class="flex gap-6 items-center">
+
+                <li>
+                    <a href="index.html"
+                        class="hover:text-blue-400 transition">
+                        Inicio
+                    </a>
+                </li>
+
+                <li>
+                    <a href="catalogo.html"
+                        class="text-blue-400 font-bold">
+                        Catálogo
+                    </a>
+                </li>
+
+                <li>
+                    <a href="carrito.html"
+                        class="hover:text-blue-400 transition">
+
+                        Carrito
+
+                        <span id="contadorCarrito"
+                            class="bg-blue-500 text-white px-2 py-1 rounded-full text-sm ml-1">
+
+                            0
+
+                        </span>
+
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </nav>
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <section class="py-16 text-center px-6">
+
+        <h1 class="text-6xl font-bold mb-6">
+            Catálogo de videojuegos
+        </h1>
+
+        <p class="text-gray-400 text-xl max-w-3xl mx-auto">
+            Descubre las últimas novedades, juegos más vendidos y ofertas.
+        </p>
+
+    </section>
+
+    <!-- =========================
+         BUSCADOR
+    ========================== -->
+
+    <section class="container mx-auto px-6 mb-8">
+
+        <input type="text"
+            id="buscador"
+            placeholder="Buscar videojuegos..."
+            class="w-full p-4 rounded-2xl bg-slate-800 border border-slate-700 focus:outline-none focus:border-blue-500 text-lg">
+
+    </section>
+
+    <!-- =========================
+         FILTROS
+    ========================== -->
+
+    <section class="container mx-auto px-6 mb-12">
+
+        <div class="flex flex-wrap gap-4 justify-center">
+
+            <button class="filtro bg-blue-500 hover:bg-blue-600 transition px-5 py-2 rounded-xl"
+                data-filtro="todos">
+
+                Todos
+
+            </button>
+
+            <button class="filtro bg-slate-800 hover:bg-slate-700 transition px-5 py-2 rounded-xl"
+                data-filtro="PlayStation 5">
+
+                PlayStation 5
+
+            </button>
+
+            <button class="filtro bg-slate-800 hover:bg-slate-700 transition px-5 py-2 rounded-xl"
+                data-filtro="PC">
+
+                PC
+
+            </button>
+
+            <button class="filtro bg-slate-800 hover:bg-slate-700 transition px-5 py-2 rounded-xl"
+                data-filtro="Nintendo Switch">
+
+                Nintendo Switch
+
+            </button>
+
+            <button class="filtro bg-slate-800 hover:bg-slate-700 transition px-5 py-2 rounded-xl"
+                data-filtro="Xbox">
+
+                Xbox
+
+            </button>
+
+            <button class="filtro bg-slate-800 hover:bg-slate-700 transition px-5 py-2 rounded-xl"
+                data-filtro="Multiplataforma">
+
+                Multiplataforma
+
+            </button>
+
+        </div>
+
+    </section>
+
+    <!-- =========================
+         GRID JUEGOS
+    ========================== -->
+
+    <section class="container mx-auto px-6 pb-20">
+
+        <div id="gridJuegos"
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+
+        </div>
+
+    </section>
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer class="bg-slate-800 py-10 mt-10">
+
+        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+
+            <div>
+
+                <h3 class="text-3xl font-bold text-blue-400 mb-2">
+                    GameStore
+                </h3>
+
+                <p class="text-gray-400">
+                    Tu tienda online de videojuegos.
+                </p>
+
+            </div>
+
+            <div class="flex gap-6 text-lg">
+
+                <a href="https://www.instagram.com"
+                    target="_blank"
+                    class="hover:text-blue-400 transition">
+
+                    Instagram
+
+                </a>
+
+                <a href="https://x.com"
+                    target="_blank"
+                    class="hover:text-blue-400 transition">
+
+                    X
+
+                </a>
+
+                <a href="https://www.youtube.com"
+                    target="_blank"
+                    class="hover:text-blue-400 transition">
+
+                    YouTube
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+    <!-- =========================
+         SCRIPT
+    ========================== -->
+
+    <script>
+
+        /* =========================
+           CONFIG API
+        ========================== */
+
+        const API_URL =
+            "http://127.0.0.1:8000/games";
+
+        /* =========================
+           ELEMENTOS
+        ========================== */
+
+        const gridJuegos =
+            document.getElementById("gridJuegos");
+
+        const buscador =
+            document.getElementById("buscador");
+
+        const contadorCarrito =
+            document.getElementById("contadorCarrito");
+
+        const botonesFiltro =
+            document.querySelectorAll(".filtro");
+
+        /* =========================
+           CARRITO
+        ========================== */
+
+        let carrito =
+            JSON.parse(localStorage.getItem("carrito")) || [];
+
+        contadorCarrito.textContent =
+            carrito.length;
+
+        /* =========================
+           IMÁGENES LOCALES
+        ========================== */
+
+        const imagenes = {
+
+            "Cyberpunk 2077":
+                "assets/images/cyberpunk.jpg",
+
+            "Elden Ring":
+                "assets/images/elden_ring.jpg",
+
+            "GTA V":
+                "assets/images/gta_v.jpg",
+
+            "Zelda TOTK":
+                "assets/images/Zelda.jpg",
+
+            "Red Dead Redemption 2":
+                "assets/images/red_dead_2.jpg",
+
+            "Hogwarts Legacy":
+                "assets/images/Hogwarts.jpg",
+
+            "The Witcher 3":
+                "assets/images/the_witcher_3.jpg",
+
+            "Spider-Man 2":
+                "assets/images/spiderman_2.jpg",
+
+            "God of War Ragnarök":
+                "assets/images/god_of_war.jpg",
+
+            "Minecraft":
+                "assets/images/Minecraft.jpg",
+
+            "Fortnite":
+                "assets/images/Fortnite.jpg",
+
+            "Call of Duty Black Ops 6":
+                "assets/images/call_of_duty.jpg",
+
+            "Mario Kart 8 Deluxe":
+                "assets/images/mario_kart_8.jpg",
+
+            "League of Legends":
+                "assets/images/league_of_legends.jpg",
+
+            "Valorant":
+                "assets/images/Valorant.jpg",
+
+            "EA Sports FC 26":
+                "assets/images/ea_sports.jpg"
+
+        };
+
+        /* =========================
+           VARIABLES
+        ========================== */
+
+        let juegosOriginales = [];
+
+        let filtroActual = "todos";
+
+        /* =========================
+           CARGAR JUEGOS
+        ========================== */
+
+        async function cargarJuegos() {
+
+            try {
+
+                const respuesta =
+                    await fetch(API_URL);
+
+                const juegos =
+                    await respuesta.json();
+
+                juegosOriginales = juegos;
+
+                mostrarJuegos(juegos);
+
+            } catch (error) {
+
+                console.error(error);
+
+                gridJuegos.innerHTML = `
+
+                    <div class="col-span-full bg-red-500 text-white p-6 rounded-xl text-center">
+
+                        Error al cargar los videojuegos.
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+        /* =========================
+           MOSTRAR JUEGOS
+        ========================== */
+
+        function mostrarJuegos(juegos) {
+
+            gridJuegos.innerHTML = "";
+
+            if (juegos.length === 0) {
+
+                gridJuegos.innerHTML = `
+
+                    <div class="col-span-full bg-slate-800 p-8 rounded-2xl text-center">
+
+                        <p class="text-2xl text-gray-300">
+
+                            No se encontraron videojuegos.
+
+                        </p>
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+            juegos.forEach(juego => {
+
+                const imagen =
+                    imagenes[juego.title] ||
+                    "assets/images/default.jpg";
+
+                const precio =
+                    juego.price == 0
+                        ? "Gratis"
+                        : juego.price.toFixed(2) + "€";
+
+                gridJuegos.innerHTML += `
+
+                    <div class="juego bg-slate-800 rounded-2xl overflow-hidden shadow-xl hover:scale-105 transition">
+
+                        <img src="${imagen}"
+                            class="w-full h-80 object-cover">
+
+                        <div class="p-6">
+
+                            <h2 class="text-2xl font-bold mb-2">
+
+                                ${juego.title}
+
+                            </h2>
+
+                            <p class="text-gray-400 mb-2">
+
+                                ${juego.platform}
+
+                            </p>
+
+                            <p class="text-gray-400 mb-4">
+
+                                Género: ${juego.genre}
+
+                            </p>
+
+                            <div class="flex justify-between items-center mb-4">
+
+                                <span class="text-blue-400 text-2xl font-bold">
+
+                                    ${precio}
+
+                                </span>
+
+                                <span class="text-sm text-gray-400">
+
+                                    Stock: ${juego.stock}
+
+                                </span>
+
+                            </div>
+
+                            <a href="producto.html?id=${juego.id}"
+                                class="block text-center bg-blue-500 hover:bg-blue-600 transition py-3 rounded-xl font-bold">
+
+                                Ver más
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            });
+
+        }
+
+        /* =========================
+           BUSCADOR
+        ========================== */
+
+        buscador.addEventListener("keyup", () => {
+
+            aplicarFiltros();
+
+        });
+
+        /* =========================
+           FILTROS
+        ========================== */
+
+        botonesFiltro.forEach(boton => {
+
+            boton.addEventListener("click", () => {
+
+                botonesFiltro.forEach(btn => {
+
+                    btn.classList.remove(
+                        "bg-blue-500",
+                        "hover:bg-blue-600"
+                    );
+
+                    btn.classList.add(
+                        "bg-slate-800",
+                        "hover:bg-slate-700"
+                    );
+
+                });
+
+                boton.classList.remove(
+                    "bg-slate-800",
+                    "hover:bg-slate-700"
+                );
+
+                boton.classList.add(
+                    "bg-blue-500",
+                    "hover:bg-blue-600"
+                );
+
+                filtroActual =
+                    boton.dataset.filtro;
+
+                aplicarFiltros();
+
+            });
+
+        });
+
+        /* =========================
+           APLICAR FILTROS
+        ========================== */
+
+        function aplicarFiltros() {
+
+            const texto =
+                buscador.value.toLowerCase();
+
+            let juegosFiltrados =
+                juegosOriginales.filter(juego => {
+
+                    const coincideBusqueda =
+                        juego.title.toLowerCase().includes(texto);
+
+                    const coincideFiltro =
+
+                        filtroActual === "todos" ||
+
+                        juego.platform === filtroActual;
+
+                    return coincideBusqueda && coincideFiltro;
+
+                });
+
+            mostrarJuegos(juegosFiltrados);
+
+        }
+
+        /* =========================
+           INICIAR
+        ========================== */
+
+        cargarJuegos();
+
+    </script>
+
+</body>
+
+</html>
