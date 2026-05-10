@@ -8,71 +8,95 @@
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
 
-    <title>GameStore | Inicio</title>
+    <title>GameStore</title>
 
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
 </head>
 
-<body class="bg-slate-900 text-white overflow-x-hidden">
+<body>
 
     <!-- =========================
          NAVBAR
     ========================== -->
 
-    <nav class="bg-slate-800 p-4 sticky top-0 z-50 shadow-xl">
+    <nav class="navbar">
 
-        <div class="container mx-auto flex justify-between items-center">
+        <div class="container-custom">
 
-            <h1 class="text-3xl font-bold text-blue-400">
+            <a href="index.html"
+                class="logo">
+
                 GameStore
-            </h1>
 
-            <ul class="flex gap-6 items-center">
+            </a>
+
+            <ul class="nav-menu">
 
                 <li>
+
                     <a href="index.html"
-                        class="text-blue-400 font-bold">
+                        class="nav-active">
+
                         Inicio
+
                     </a>
+
                 </li>
 
                 <li>
+
                     <a href="catalogo.html"
-                        class="hover:text-blue-400 transition">
+                        class="nav-link">
+
                         Catálogo
+
                     </a>
+
                 </li>
 
                 <li>
+
                     <a href="pedidos.html"
-                        class="hover:text-blue-400 transition">
+                        class="nav-link">
+
                         Pedidos
+
                     </a>
+
                 </li>
 
                 <li>
+
                     <a href="perfil.html"
-                        class="hover:text-blue-400 transition">
+                        class="nav-link">
+
                         Perfil
+
                     </a>
+
                 </li>
 
                 <li>
+
                     <a href="carrito.html"
-                        class="hover:text-blue-400 transition">
+                        class="nav-link">
 
                         Carrito
 
                         <span id="contadorCarrito"
-                            class="bg-blue-500 text-white px-2 py-1 rounded-full text-sm ml-1">
+                            class="cart-badge">
 
                             0
 
                         </span>
 
                     </a>
+
                 </li>
 
             </ul>
@@ -85,35 +109,41 @@
          HERO
     ========================== -->
 
-    <section class="relative py-32 px-6 text-center overflow-hidden">
+    <section class="hero-section">
 
-        <div class="absolute inset-0 bg-gradient-to-r from-blue-900/20 to-purple-900/20"></div>
+        <div class="container-custom hero-content">
 
-        <div class="relative z-10 container mx-auto">
+            <p class="hero-tag">
 
-            <h1 class="text-6xl font-bold mb-6">
-
-                Tu próxima <span class="text-blue-400">aventura</span> empieza aquí
-
-            </h1>
-
-            <p class="text-base md:text-xl text-gray-300 max-w-4xl mx-auto mb-12 leading-relaxed">
-
-                Descubre los videojuegos más vendidos, nuevas aventuras y experiencias épicas en GameStore.
+                TU TIENDA GAMING DEFINITIVA
 
             </p>
 
-            <div class="flex flex-col md:flex-row justify-center gap-6">
+            <h1 class="hero-title">
+
+                Descubre los mejores videojuegos
+
+            </h1>
+
+            <p class="hero-description">
+
+                Compra títulos populares, descubre ofertas
+                increíbles y explora nuevas aventuras para
+                todas las plataformas.
+
+            </p>
+
+            <div class="hero-buttons">
 
                 <a href="catalogo.html"
-                    class="bg-blue-500 hover:bg-blue-600 transition px-10 py-5 rounded-2xl text-xl font-bold">
+                    class="btn-primary">
 
                     Explorar catálogo
 
                 </a>
 
                 <a href="#destacados"
-                    class="border border-blue-400 hover:bg-blue-400 hover:text-slate-900 transition px-10 py-5 rounded-2xl text-xl font-bold">
+                    class="btn-secondary">
 
                     Ver destacados
 
@@ -130,64 +160,228 @@
     ========================== -->
 
     <section id="destacados"
-        class="container mx-auto px-6 py-20">
+        class="featured-section">
 
-        <div class="flex justify-between items-center mb-12 flex-wrap gap-4">
+        <div class="container-custom">
 
-            <div>
+            <!-- HEADER -->
 
-                <h2 class="text-4xl font-bold mb-4">
+            <div class="section-header">
+
+                <p class="section-tag">
+
                     Juegos destacados
+
+                </p>
+
+                <h2 class="section-title">
+
+                    Los más populares de GameStore
+
                 </h2>
 
-                <p class="text-gray-400 text-base">
-                    Los títulos más populares del momento.
+                <p class="section-description">
+
+                    Descubre algunos de los videojuegos más vendidos
+                    y mejor valorados por nuestra comunidad.
+
                 </p>
 
             </div>
 
-            <a href="catalogo.html"
-                class="bg-slate-800 hover:bg-slate-700 transition px-6 py-3 rounded-xl font-bold">
+            <!-- JUEGOS -->
 
-                Ver catálogo completo
+            <div class="featured-games">
 
-            </a>
+                <!-- JUEGO -->
 
-        </div>
+                <div class="featured-game">
 
-        <!-- GRID -->
+                    <img src="assets/images/elden_ring.jpg"
+                        class="featured-image">
 
-        <div id="gridDestacados"
-            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+                    <div class="featured-info">
 
-            <!-- DINÁMICO -->
+                        <h3>Elden Ring</h3>
+
+                        <p>RPG • PC</p>
+
+                    </div>
+
+                    <div class="featured-price">
+
+                        59.99€
+
+                    </div>
+
+                    <a href="catalogo.html"
+                        class="mini-btn">
+
+                        Ver
+
+                    </a>
+
+                </div>
+
+                <!-- JUEGO -->
+
+                <div class="featured-game">
+
+                    <img src="assets/images/cyberpunk.jpg"
+                        class="featured-image">
+
+                    <div class="featured-info">
+
+                        <h3>Cyberpunk 2077</h3>
+
+                        <p>Acción • PS5</p>
+
+                    </div>
+
+                    <div class="featured-price">
+
+                        49.99€
+
+                    </div>
+
+                    <a href="catalogo.html"
+                        class="mini-btn">
+
+                        Ver
+
+                    </a>
+
+                </div>
+
+                <!-- JUEGO -->
+
+                <div class="featured-game">
+
+                    <img src="assets/images/spiderman_2.jpg"
+                        class="featured-image">
+
+                    <div class="featured-info">
+
+                        <h3>Spider-Man 2</h3>
+
+                        <p>Acción • PS5</p>
+
+                    </div>
+
+                    <div class="featured-price">
+
+                        69.99€
+
+                    </div>
+
+                    <a href="catalogo.html"
+                        class="mini-btn">
+
+                        Ver
+
+                    </a>
+
+                </div>
+
+                <!-- JUEGO -->
+
+                <div class="featured-game">
+
+                    <img src="assets/images/red_dead_2.jpg"
+                        class="featured-image">
+
+                    <div class="featured-info">
+
+                        <h3>Red Dead Redemption 2</h3>
+
+                        <p>Mundo abierto • Xbox</p>
+
+                    </div>
+
+                    <div class="featured-price">
+
+                        39.99€
+
+                    </div>
+
+                    <a href="catalogo.html"
+                        class="mini-btn">
+
+                        Ver
+
+                    </a>
+
+                </div>
+
+                <!-- JUEGO -->
+
+                <div class="featured-game">
+
+                    <img src="assets/images/Zelda.jpg"
+                        class="featured-image">
+
+                    <div class="featured-info">
+
+                        <h3>Zelda TOTK</h3>
+
+                        <p>Nintendo Switch</p>
+
+                    </div>
+
+                    <div class="featured-price">
+
+                        59.99€
+
+                    </div>
+
+                    <a href="catalogo.html"
+                        class="mini-btn">
+
+                        Ver
+
+                    </a>
+
+                </div>
+
+            </div>
 
         </div>
 
     </section>
 
     <!-- =========================
-         BANNER
+         OFERTAS
     ========================== -->
 
-    <section class="py-24 px-6">
+    <section class="offers-section">
 
-        <div class="container mx-auto">
+        <div class="container-custom">
 
-            <div class="bg-gradient-to-r from-blue-600 to-purple-700 rounded-3xl p-12 md:p-20 text-center shadow-2xl">
+            <div class="offer-box">
 
-                <h2 class="text-5xl md:text-6xl font-black mb-8">
-                    Miles de jugadores ya están en GameStore
-                </h2>
+                <p class="offer-tag">
 
-                <p class="text-2xl mb-10 max-w-3xl mx-auto">
-                    Compra videojuegos de forma rápida, segura y descubre nuevos mundos cada semana.
+                    OFERTA ESPECIAL
+
                 </p>
 
-                <a href="register.html"
-                    class="inline-block bg-white text-slate-900 hover:scale-105 transform transition px-10 py-5 rounded-2xl text-2xl font-bold">
+                <h2 class="offer-title">
 
-                    Crear cuenta
+                    Hasta 70% de descuento
+
+                </h2>
+
+                <p class="offer-description">
+
+                    Aprovecha nuestras ofertas exclusivas en videojuegos,
+                    expansiones y ediciones premium.
+
+                </p>
+
+                <a href="catalogo.html"
+                    class="btn-primary">
+
+                    Ver ofertas
 
                 </a>
 
@@ -201,27 +395,31 @@
          FOOTER
     ========================== -->
 
-    <footer class="bg-slate-800 py-12 mt-10">
+    <footer class="footer">
 
-        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+        <div class="container-custom footer-content">
 
             <div>
 
-                <h3 class="text-3xl font-bold text-blue-400 mb-3">
+                <h3 class="logo mb-3">
+
                     GameStore
+
                 </h3>
 
-                <p class="text-gray-400 text-base">
+                <p class="text-slate-400">
+
                     Tu tienda online de videojuegos.
+
                 </p>
 
             </div>
 
-            <div class="flex gap-8 text-base">
+            <div class="footer-links">
 
                 <a href="https://www.instagram.com"
                     target="_blank"
-                    class="hover:text-blue-400 transition">
+                    class="footer-link">
 
                     Instagram
 
@@ -229,7 +427,7 @@
 
                 <a href="https://x.com"
                     target="_blank"
-                    class="hover:text-blue-400 transition">
+                    class="footer-link">
 
                     X
 
@@ -237,7 +435,7 @@
 
                 <a href="https://www.youtube.com"
                     target="_blank"
-                    class="hover:text-blue-400 transition">
+                    class="footer-link">
 
                     YouTube
 
@@ -255,201 +453,14 @@
 
     <script>
 
-        /* =========================
-           API
-        ========================== */
-
-        const API_URL =
-            "http://127.0.0.1:8000/games";
-
-        /* =========================
-           ELEMENTOS
-        ========================== */
-
-        const gridDestacados =
-            document.getElementById("gridDestacados");
-
         const contadorCarrito =
             document.getElementById("contadorCarrito");
-
-        /* =========================
-           CARRITO
-        ========================== */
 
         let carrito =
             JSON.parse(localStorage.getItem("carrito")) || [];
 
         contadorCarrito.textContent =
             carrito.length;
-
-        /* =========================
-           IMÁGENES
-        ========================== */
-
-        const imagenes = {
-
-            "Cyberpunk 2077":
-                "assets/images/cyberpunk.jpg",
-
-            "Elden Ring":
-                "assets/images/elden_ring.jpg",
-
-            "GTA V":
-                "assets/images/gta_v.jpg",
-
-            "Zelda TOTK":
-                "assets/images/Zelda.jpg",
-
-            "Red Dead Redemption 2":
-                "assets/images/red_dead_2.jpg",
-
-            "Hogwarts Legacy":
-                "assets/images/Hogwarts.jpg",
-
-            "The Witcher 3":
-                "assets/images/the_witcher_3.jpg",
-
-            "Spider-Man 2":
-                "assets/images/spiderman_2.jpg",
-
-            "God of War Ragnarök":
-                "assets/images/god_of_war.jpg",
-
-            "Minecraft":
-                "assets/images/Minecraft.jpg",
-
-            "Fortnite":
-                "assets/images/Fortnite.jpg",
-
-            "Call of Duty Black Ops 6":
-                "assets/images/call_of_duty.jpg",
-
-            "Mario Kart 8 Deluxe":
-                "assets/images/mario_kart_8.jpg",
-
-            "League of Legends":
-                "assets/images/league_of_legends.jpg",
-
-            "Valorant":
-                "assets/images/Valorant.jpg",
-
-            "EA Sports FC 26":
-                "assets/images/ea_sports.jpg"
-
-        };
-
-        /* =========================
-           CARGAR DESTACADOS
-        ========================== */
-
-        async function cargarDestacados() {
-
-            try {
-
-                const respuesta =
-                    await fetch(API_URL);
-
-                const juegos =
-                    await respuesta.json();
-
-                mostrarDestacados(juegos.slice(0, 4));
-
-            } catch (error) {
-
-                console.error(error);
-
-                gridDestacados.innerHTML = `
-
-                    <div class="col-span-full bg-red-500 p-6 rounded-2xl text-center">
-
-                        Error al cargar videojuegos.
-
-                    </div>
-
-                `;
-
-            }
-
-        }
-
-        /* =========================
-           MOSTRAR DESTACADOS
-        ========================== */
-
-        function mostrarDestacados(juegos) {
-
-            gridDestacados.innerHTML = "";
-
-            juegos.forEach(juego => {
-
-                const imagen =
-                    imagenes[juego.title] ||
-                    "assets/images/default.jpg";
-
-                const precio =
-                    juego.price == 0
-                        ? "Gratis"
-                        : juego.price.toFixed(2) + "€";
-
-                gridDestacados.innerHTML += `
-
-                    <div class="bg-slate-800 rounded-3xl overflow-hidden shadow-2xl hover:scale-105 transition transform">
-
-                        <!-- IMAGEN -->
-
-                        <img src="${imagen}"
-                            class="w-full h-80 object-cover">
-
-                        <!-- INFO -->
-
-                        <div class="p-6">
-
-                            <p class="text-blue-400 mb-3 text-base">
-                                ${juego.genre}
-                            </p>
-
-                            <h3 class="text-2xl font-bold mb-4">
-                                ${juego.title}
-                            </h3>
-
-                            <p class="text-gray-400 mb-6 text-base">
-                                ${juego.platform}
-                            </p>
-
-                            <div class="flex justify-between items-center mb-6">
-
-                                <span class="text-3xl font-bold text-blue-400">
-                                    ${precio}
-                                </span>
-
-                                <span class="text-gray-400">
-                                    Stock: ${juego.stock}
-                                </span>
-
-                            </div>
-
-                            <a href="producto.html?id=${juego.id}"
-                                class="block text-center bg-blue-500 hover:bg-blue-600 transition py-4 rounded-2xl font-bold text-base">
-
-                                Ver juego
-
-                            </a>
-
-                        </div>
-
-                    </div>
-
-                `;
-
-            });
-
-        }
-
-        /* =========================
-           INICIAR
-        ========================== */
-
-        cargarDestacados();
 
     </script>
 

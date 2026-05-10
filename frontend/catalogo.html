@@ -13,52 +13,94 @@
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
 </head>
 
-<body class="bg-slate-900 text-white">
+<body>
 
     <!-- =========================
          NAVBAR
     ========================== -->
 
-    <nav class="bg-slate-800 p-4 sticky top-0 z-50 shadow-xl">
+    <nav class="navbar">
 
-        <div class="container mx-auto flex justify-between items-center">
+        <div class="container-custom navbar-container">
 
-            <h1 class="text-3xl font-bold text-blue-400">
+            <!-- LOGO -->
+
+            <a href="index.html"
+                class="logo">
+
                 GameStore
-            </h1>
 
-            <ul class="flex gap-6 items-center">
+            </a>
+
+            <!-- MENU -->
+
+            <ul class="nav-menu">
 
                 <li>
+
                     <a href="index.html"
-                        class="hover:text-blue-400 transition">
+                        class="nav-link">
+
                         Inicio
+
                     </a>
+
                 </li>
 
                 <li>
+
                     <a href="catalogo.html"
-                        class="text-blue-400 font-bold">
+                        class="nav-active">
+
                         Catálogo
+
                     </a>
+
                 </li>
 
                 <li>
+
+                    <a href="pedidos.html"
+                        class="nav-link">
+
+                        Pedidos
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="perfil.html"
+                        class="nav-link">
+
+                        Perfil
+
+                    </a>
+
+                </li>
+
+                <li>
+
                     <a href="carrito.html"
-                        class="hover:text-blue-400 transition">
+                        class="nav-link cart-link">
 
                         Carrito
 
                         <span id="contadorCarrito"
-                            class="bg-blue-500 text-white px-2 py-1 rounded-full text-sm ml-1">
+                            class="cart-badge">
 
                             0
 
                         </span>
 
                     </a>
+
                 </li>
 
             </ul>
@@ -68,18 +110,34 @@
     </nav>
 
     <!-- =========================
-         HEADER
+         HERO
     ========================== -->
 
-    <section class="py-16 text-center px-6">
+    <section class="hero-section">
 
-        <h1 class="text-6xl font-bold mb-6">
-            Catálogo de videojuegos
-        </h1>
+        <div class="container-custom">
 
-        <p class="text-gray-400 text-xl max-w-3xl mx-auto">
-            Descubre las últimas novedades, juegos más vendidos y ofertas.
-        </p>
+            <h1 class="hero-title">
+
+                Explora el mejor
+
+                <span class="gradient-text">
+
+                    catálogo gaming
+
+                </span>
+
+            </h1>
+
+            <p class="hero-subtitle">
+
+                Descubre los títulos más vendidos,
+                lanzamientos recientes y experiencias épicas
+                para todas las plataformas.
+
+            </p>
+
+        </div>
 
     </section>
 
@@ -87,12 +145,16 @@
          BUSCADOR
     ========================== -->
 
-    <section class="container mx-auto px-6 mb-8">
+    <section class="container-custom mb-10">
 
-        <input type="text"
-            id="buscador"
-            placeholder="Buscar videojuegos..."
-            class="w-full p-4 rounded-2xl bg-slate-800 border border-slate-700 focus:outline-none focus:border-blue-500 text-lg">
+        <div class="max-w-4xl mx-auto">
+
+            <input type="text"
+                id="buscador"
+                placeholder="Buscar videojuegos..."
+                class="w-full bg-slate-900/70 border border-slate-700 focus:border-blue-500 rounded-2xl p-5 text-lg outline-none transition shadow-2xl">
+
+        </div>
 
     </section>
 
@@ -100,46 +162,46 @@
          FILTROS
     ========================== -->
 
-    <section class="container mx-auto px-6 mb-12">
+    <section class="container-custom mb-16">
 
-        <div class="flex flex-wrap gap-4 justify-center">
+        <div class="flex flex-wrap justify-center gap-4">
 
-            <button class="filtro bg-blue-500 hover:bg-blue-600 transition px-5 py-2 rounded-xl"
+            <button class="filtro btn-primary"
                 data-filtro="todos">
 
                 Todos
 
             </button>
 
-            <button class="filtro bg-slate-800 hover:bg-slate-700 transition px-5 py-2 rounded-xl"
+            <button class="filtro filtro-secundario"
                 data-filtro="PlayStation 5">
 
                 PlayStation 5
 
             </button>
 
-            <button class="filtro bg-slate-800 hover:bg-slate-700 transition px-5 py-2 rounded-xl"
+            <button class="filtro filtro-secundario"
                 data-filtro="PC">
 
                 PC
 
             </button>
 
-            <button class="filtro bg-slate-800 hover:bg-slate-700 transition px-5 py-2 rounded-xl"
+            <button class="filtro filtro-secundario"
                 data-filtro="Nintendo Switch">
 
                 Nintendo Switch
 
             </button>
 
-            <button class="filtro bg-slate-800 hover:bg-slate-700 transition px-5 py-2 rounded-xl"
+            <button class="filtro filtro-secundario"
                 data-filtro="Xbox">
 
                 Xbox
 
             </button>
 
-            <button class="filtro bg-slate-800 hover:bg-slate-700 transition px-5 py-2 rounded-xl"
+            <button class="filtro filtro-secundario"
                 data-filtro="Multiplataforma">
 
                 Multiplataforma
@@ -154,10 +216,10 @@
          GRID JUEGOS
     ========================== -->
 
-    <section class="container mx-auto px-6 pb-20">
+    <section class="container-custom pb-24">
 
         <div id="gridJuegos"
-            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+            class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-10">
 
         </div>
 
@@ -167,27 +229,32 @@
          FOOTER
     ========================== -->
 
-    <footer class="bg-slate-800 py-10 mt-10">
+    <footer class="py-12">
 
-        <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div
+            class="container-custom flex flex-col md:flex-row justify-between items-center gap-8">
 
             <div>
 
-                <h3 class="text-3xl font-bold text-blue-400 mb-2">
+                <h3 class="logo mb-3">
+
                     GameStore
+
                 </h3>
 
-                <p class="text-gray-400">
+                <p class="text-slate-400">
+
                     Tu tienda online de videojuegos.
+
                 </p>
 
             </div>
 
-            <div class="flex gap-6 text-lg">
+            <div class="flex gap-8 text-lg">
 
                 <a href="https://www.instagram.com"
                     target="_blank"
-                    class="hover:text-blue-400 transition">
+                    class="footer-link">
 
                     Instagram
 
@@ -195,7 +262,7 @@
 
                 <a href="https://x.com"
                     target="_blank"
-                    class="hover:text-blue-400 transition">
+                    class="footer-link">
 
                     X
 
@@ -203,7 +270,7 @@
 
                 <a href="https://www.youtube.com"
                     target="_blank"
-                    class="hover:text-blue-400 transition">
+                    class="footer-link">
 
                     YouTube
 
@@ -221,16 +288,8 @@
 
     <script>
 
-        /* =========================
-           CONFIG API
-        ========================== */
-
         const API_URL =
             "http://127.0.0.1:8000/games";
-
-        /* =========================
-           ELEMENTOS
-        ========================== */
 
         const gridJuegos =
             document.getElementById("gridJuegos");
@@ -244,19 +303,11 @@
         const botonesFiltro =
             document.querySelectorAll(".filtro");
 
-        /* =========================
-           CARRITO
-        ========================== */
-
         let carrito =
             JSON.parse(localStorage.getItem("carrito")) || [];
 
         contadorCarrito.textContent =
             carrito.length;
-
-        /* =========================
-           IMÁGENES LOCALES
-        ========================== */
 
         const imagenes = {
 
@@ -310,17 +361,9 @@
 
         };
 
-        /* =========================
-           VARIABLES
-        ========================== */
-
         let juegosOriginales = [];
 
         let filtroActual = "todos";
-
-        /* =========================
-           CARGAR JUEGOS
-        ========================== */
 
         async function cargarJuegos() {
 
@@ -342,7 +385,7 @@
 
                 gridJuegos.innerHTML = `
 
-                    <div class="col-span-full bg-red-500 text-white p-6 rounded-xl text-center">
+                    <div class="col-span-full bg-red-500 text-white p-6 rounded-2xl text-center">
 
                         Error al cargar los videojuegos.
 
@@ -354,10 +397,6 @@
 
         }
 
-        /* =========================
-           MOSTRAR JUEGOS
-        ========================== */
-
         function mostrarJuegos(juegos) {
 
             gridJuegos.innerHTML = "";
@@ -366,9 +405,9 @@
 
                 gridJuegos.innerHTML = `
 
-                    <div class="col-span-full bg-slate-800 p-8 rounded-2xl text-center">
+                    <div class="col-span-full game-card p-12 text-center">
 
-                        <p class="text-2xl text-gray-300">
+                        <p class="text-3xl text-slate-300 font-bold">
 
                             No se encontraron videojuegos.
 
@@ -395,53 +434,69 @@
 
                 gridJuegos.innerHTML += `
 
-                    <div class="juego bg-slate-800 rounded-2xl overflow-hidden shadow-xl hover:scale-105 transition">
+                    <div class="game-card overflow-hidden flex flex-col">
 
-                        <img src="${imagen}"
-                            class="w-full h-80 object-cover">
+                        <!-- IMAGEN -->
 
-                        <div class="p-6">
+                        <div class="overflow-hidden">
 
-                            <h2 class="text-2xl font-bold mb-2">
+                            <img src="${imagen}"
+                                class="w-full h-72 object-cover hover:scale-110 transition duration-500">
 
-                                ${juego.title}
+                        </div>
 
-                            </h2>
+                        <!-- INFO -->
 
-                            <p class="text-gray-400 mb-2">
+                        <div class="p-7 flex flex-col flex-grow">
 
-                                ${juego.platform}
+                            <div class="mb-5">
 
-                            </p>
+                                <h2 class="text-3xl font-black mb-3">
 
-                            <p class="text-gray-400 mb-4">
+                                    ${juego.title}
 
-                                Género: ${juego.genre}
+                                </h2>
 
-                            </p>
+                                <p class="text-slate-400 mb-2">
 
-                            <div class="flex justify-between items-center mb-4">
+                                    ${juego.platform}
 
-                                <span class="text-blue-400 text-2xl font-bold">
+                                </p>
 
-                                    ${precio}
+                                <p class="text-slate-500">
 
-                                </span>
+                                    ${juego.genre}
 
-                                <span class="text-sm text-gray-400">
-
-                                    Stock: ${juego.stock}
-
-                                </span>
+                                </p>
 
                             </div>
 
-                            <a href="producto.html?id=${juego.id}"
-                                class="block text-center bg-blue-500 hover:bg-blue-600 transition py-3 rounded-xl font-bold">
+                            <div class="mt-auto">
 
-                                Ver más
+                                <div class="flex justify-between items-center mb-6">
 
-                            </a>
+                                    <span class="text-blue-400 text-4xl font-black">
+
+                                        ${precio}
+
+                                    </span>
+
+                                    <span class="text-sm text-slate-400">
+
+                                        Stock: ${juego.stock}
+
+                                    </span>
+
+                                </div>
+
+                                <a href="producto.html?id=${juego.id}"
+                                    class="btn-primary w-full">
+
+                                    Ver videojuego
+
+                                </a>
+
+                            </div>
 
                         </div>
 
@@ -453,19 +508,11 @@
 
         }
 
-        /* =========================
-           BUSCADOR
-        ========================== */
-
         buscador.addEventListener("keyup", () => {
 
             aplicarFiltros();
 
         });
-
-        /* =========================
-           FILTROS
-        ========================== */
 
         botonesFiltro.forEach(boton => {
 
@@ -473,27 +520,15 @@
 
                 botonesFiltro.forEach(btn => {
 
-                    btn.classList.remove(
-                        "bg-blue-500",
-                        "hover:bg-blue-600"
-                    );
+                    btn.classList.remove("btn-primary");
 
-                    btn.classList.add(
-                        "bg-slate-800",
-                        "hover:bg-slate-700"
-                    );
+                    btn.classList.add("filtro-secundario");
 
                 });
 
-                boton.classList.remove(
-                    "bg-slate-800",
-                    "hover:bg-slate-700"
-                );
+                boton.classList.remove("filtro-secundario");
 
-                boton.classList.add(
-                    "bg-blue-500",
-                    "hover:bg-blue-600"
-                );
+                boton.classList.add("btn-primary");
 
                 filtroActual =
                     boton.dataset.filtro;
@@ -503,10 +538,6 @@
             });
 
         });
-
-        /* =========================
-           APLICAR FILTROS
-        ========================== */
 
         function aplicarFiltros() {
 
@@ -532,10 +563,6 @@
             mostrarJuegos(juegosFiltrados);
 
         }
-
-        /* =========================
-           INICIAR
-        ========================== */
 
         cargarJuegos();
 
