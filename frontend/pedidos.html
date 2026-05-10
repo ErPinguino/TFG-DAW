@@ -13,30 +13,38 @@
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
 </head>
 
-<body class="bg-slate-900 text-white min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col">
 
     <!-- =========================
          NAVBAR
     ========================== -->
 
-    <nav class="bg-slate-800 p-4 shadow-xl">
+    <nav class="navbar p-4">
 
         <div class="container mx-auto flex justify-between items-center">
 
-            <h1 class="text-3xl font-bold text-blue-400">
+            <!-- LOGO -->
+
+            <a href="index.html"
+                class="logo">
 
                 GameStore
 
-            </h1>
+            </a>
 
-            <ul class="flex gap-6 items-center">
+            <!-- MENÚ -->
+
+            <ul class="flex gap-6 items-center flex-wrap">
 
                 <li>
 
                     <a href="index.html"
-                        class="hover:text-blue-400 transition">
+                        class="nav-link">
 
                         Inicio
 
@@ -47,7 +55,7 @@
                 <li>
 
                     <a href="catalogo.html"
-                        class="hover:text-blue-400 transition">
+                        class="nav-link">
 
                         Catálogo
 
@@ -58,9 +66,16 @@
                 <li>
 
                     <a href="carrito.html"
-                        class="hover:text-blue-400 transition">
+                        class="nav-link">
 
                         Carrito
+
+                        <span id="contadorCarrito"
+                            class="bg-cyan-400 text-slate-950 px-2 py-1 rounded-full text-sm ml-1 font-bold">
+
+                            0
+
+                        </span>
 
                     </a>
 
@@ -69,9 +84,20 @@
                 <li>
 
                     <a href="pedidos.html"
-                        class="text-blue-400 font-bold">
+                        class="nav-active">
 
                         Mis pedidos
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="perfil.html"
+                        class="nav-link">
+
+                        Perfil
 
                     </a>
 
@@ -84,22 +110,35 @@
     </nav>
 
     <!-- =========================
-         HEADER
+         HERO
     ========================== -->
 
-    <section class="py-16 text-center px-6">
+    <section class="py-20 px-6 text-center fade-up">
 
-        <h1 class="text-6xl font-bold mb-6">
+        <div class="max-w-4xl mx-auto">
 
-            Historial de pedidos
+            <span class="badge mb-6 inline-block">
 
-        </h1>
+                Historial de compras
 
-        <p class="text-gray-400 text-xl">
+            </span>
 
-            Consulta todas tus compras realizadas.
+            <h1 class="hero-title mb-6">
 
-        </p>
+                Tus pedidos en
+                <span class="gradient-text">
+                    GameStore
+                </span>
+
+            </h1>
+
+            <p class="hero-subtitle">
+
+                Consulta todas tus compras realizadas y revisa el estado de tus pedidos.
+
+            </p>
+
+        </div>
 
     </section>
 
@@ -112,14 +151,14 @@
         <!-- MENSAJE -->
 
         <div id="mensaje"
-            class="hidden mb-8 p-4 rounded-xl text-center font-bold">
+            class="hidden mb-8 p-5 rounded-2xl text-center font-bold">
 
         </div>
 
         <!-- LISTA PEDIDOS -->
 
         <div id="listaPedidos"
-            class="space-y-10">
+            class="space-y-10 max-w-6xl mx-auto">
 
         </div>
 
@@ -129,20 +168,20 @@
          FOOTER
     ========================== -->
 
-    <footer class="bg-slate-800 py-10">
+    <footer class="footer">
 
         <div
-            class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
 
             <div>
 
-                <h3 class="text-3xl font-bold text-blue-400 mb-2">
+                <h3 class="logo mb-3">
 
                     GameStore
 
                 </h3>
 
-                <p class="text-gray-400">
+                <p class="text-slate-400">
 
                     Tu tienda online de videojuegos.
 
@@ -150,11 +189,11 @@
 
             </div>
 
-            <div class="flex gap-6 text-lg">
+            <div class="flex gap-8 text-lg">
 
                 <a href="https://www.instagram.com"
                     target="_blank"
-                    class="hover:text-blue-400 transition">
+                    class="footer-link">
 
                     Instagram
 
@@ -162,7 +201,7 @@
 
                 <a href="https://x.com"
                     target="_blank"
-                    class="hover:text-blue-400 transition">
+                    class="footer-link">
 
                     X
 
@@ -170,7 +209,7 @@
 
                 <a href="https://www.youtube.com"
                     target="_blank"
-                    class="hover:text-blue-400 transition">
+                    class="footer-link">
 
                     YouTube
 
@@ -205,12 +244,25 @@
         const mensaje =
             document.getElementById("mensaje");
 
+        const contadorCarrito =
+            document.getElementById("contadorCarrito");
+
         /* =========================
            TOKEN
         ========================== */
 
         const token =
             localStorage.getItem("token");
+
+        /* =========================
+           CARRITO
+        ========================== */
+
+        const carrito =
+            JSON.parse(localStorage.getItem("carrito")) || [];
+
+        contadorCarrito.textContent =
+            carrito.length;
 
         /* =========================
            VALIDAR LOGIN
@@ -248,10 +300,6 @@
                 const pedidos =
                     await respuesta.json();
 
-                /* =========================
-                   ERROR API
-                ========================== */
-
                 if (!respuesta.ok) {
 
                     throw new Error(
@@ -268,7 +316,7 @@
                 console.error(error);
 
                 mensaje.className =
-                    "bg-red-500 mb-8 p-4 rounded-xl text-center font-bold";
+                    "bg-red-500/20 border border-red-500/40 mb-8 p-5 rounded-2xl text-center font-bold text-red-200";
 
                 mensaje.textContent =
                     error.message;
@@ -291,26 +339,30 @@
 
                 listaPedidos.innerHTML = `
 
-                    <div class="bg-slate-800 p-12 rounded-3xl text-center">
+                    <div class="game-card p-14 rounded-[2rem] text-center">
 
-                        <h2 class="text-4xl font-bold mb-4">
+                        <div class="max-w-2xl mx-auto">
 
-                            No tienes pedidos
+                            <h2 class="text-5xl font-black mb-6">
 
-                        </h2>
+                                No tienes pedidos
 
-                        <p class="text-gray-400 text-xl mb-8">
+                            </h2>
 
-                            Realiza tu primera compra.
+                            <p class="text-slate-400 text-xl mb-10 leading-relaxed">
 
-                        </p>
+                                Todavía no has realizado ninguna compra en GameStore.
 
-                        <a href="catalogo.html"
-                            class="bg-blue-500 hover:bg-blue-600 transition px-8 py-4 rounded-2xl text-xl font-bold">
+                            </p>
 
-                            Ir al catálogo
+                            <a href="catalogo.html"
+                                class="btn-primary inline-block text-xl px-10 py-5">
 
-                        </a>
+                                Explorar catálogo
+
+                            </a>
+
+                        </div>
 
                     </div>
 
@@ -334,17 +386,17 @@
 
                     juegosHTML += `
 
-                        <div class="bg-slate-700 p-4 rounded-xl flex justify-between items-center">
+                        <div class="bg-slate-900/70 border border-white/5 rounded-3xl p-6 flex flex-col md:flex-row justify-between items-center gap-5">
 
                             <div>
 
-                                <h3 class="text-xl font-bold">
+                                <h3 class="text-2xl font-black mb-2">
 
                                     ${item.game_title}
 
                                 </h3>
 
-                                <p class="text-gray-400">
+                                <p class="text-slate-400">
 
                                     Cantidad:
                                     ${item.quantity}
@@ -353,7 +405,7 @@
 
                             </div>
 
-                            <span class="text-blue-400 font-bold text-xl">
+                            <span class="text-cyan-400 text-3xl font-black">
 
                                 ${item.price_at_purchase.toFixed(2)}€
 
@@ -367,21 +419,27 @@
 
                 listaPedidos.innerHTML += `
 
-                    <div class="bg-slate-800 rounded-3xl p-8 shadow-xl">
+                    <div class="game-card p-8 md:p-10 rounded-[2rem]">
 
                         <!-- HEADER -->
 
-                        <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8">
+                        <div class="flex flex-col xl:flex-row xl:justify-between xl:items-center gap-8 mb-10">
 
                             <div>
 
-                                <h2 class="text-3xl font-bold">
+                                <span class="badge mb-4 inline-block">
 
                                     Pedido #${pedido.id}
 
+                                </span>
+
+                                <h2 class="text-4xl md:text-5xl font-black mb-3">
+
+                                    Pedido realizado
+
                                 </h2>
 
-                                <p class="text-gray-400">
+                                <p class="text-slate-400 text-lg">
 
                                     Fecha:
                                     ${fecha}
@@ -390,15 +448,15 @@
 
                             </div>
 
-                            <div class="flex gap-4 items-center">
+                            <div class="flex flex-col items-start xl:items-end gap-4">
 
-                                <span class="bg-green-500 px-4 py-2 rounded-xl font-bold">
+                                <span class="bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 px-5 py-3 rounded-2xl font-bold">
 
                                     ${pedido.status}
 
                                 </span>
 
-                                <span class="text-3xl font-bold text-blue-400">
+                                <span class="text-5xl font-black gradient-text">
 
                                     ${pedido.total_price.toFixed(2)}€
 
@@ -410,7 +468,7 @@
 
                         <!-- ITEMS -->
 
-                        <div class="space-y-4">
+                        <div class="space-y-5">
 
                             ${juegosHTML}
 

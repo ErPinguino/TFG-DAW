@@ -13,30 +13,38 @@
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
 </head>
 
-<body class="bg-slate-900 text-white min-h-screen flex flex-col">
+<body class="text-white min-h-screen flex flex-col">
 
     <!-- =========================
          NAVBAR
     ========================== -->
 
-    <nav class="bg-slate-800 p-4 shadow-xl">
+    <nav class="navbar p-4">
 
         <div class="container mx-auto flex justify-between items-center">
 
-            <h1 class="text-3xl font-bold text-blue-400">
+            <!-- LOGO -->
+
+            <a href="index.html"
+                class="logo">
 
                 GameStore
 
-            </h1>
+            </a>
 
-            <ul class="flex gap-6 items-center">
+            <!-- NAV LINKS -->
+
+            <ul class="flex gap-6 items-center flex-wrap">
 
                 <li>
 
                     <a href="index.html"
-                        class="hover:text-blue-400 transition">
+                        class="nav-link">
 
                         Inicio
 
@@ -47,7 +55,7 @@
                 <li>
 
                     <a href="catalogo.html"
-                        class="hover:text-blue-400 transition">
+                        class="nav-link">
 
                         Catálogo
 
@@ -58,9 +66,31 @@
                 <li>
 
                     <a href="carrito.html"
-                        class="hover:text-blue-400 transition">
+                        class="nav-link">
 
                         Carrito
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="pedidos.html"
+                        class="nav-link">
+
+                        Pedidos
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="perfil.html"
+                        class="nav-link">
+
+                        Perfil
 
                     </a>
 
@@ -73,22 +103,32 @@
     </nav>
 
     <!-- =========================
-         HEADER
+         HERO
     ========================== -->
 
-    <section class="py-16 text-center px-6">
+    <section class="py-20 text-center px-6 fade-up">
 
-        <h1 class="text-6xl font-bold mb-6">
+        <div class="max-w-4xl mx-auto">
 
-            Finalizar compra
+            <span class="text-blue-400 font-bold tracking-[0.3em] uppercase text-sm">
 
-        </h1>
+                Compra segura
 
-        <p class="text-gray-400 text-xl">
+            </span>
 
-            Completa tu pedido de forma segura.
+            <h1 class="hero-title mt-6 mb-6">
 
-        </p>
+                Finaliza tu pedido
+
+            </h1>
+
+            <p class="text-gray-400 text-xl leading-relaxed max-w-2xl mx-auto">
+
+                Revisa todos los videojuegos seleccionados antes de confirmar tu compra.
+
+            </p>
+
+        </div>
 
     </section>
 
@@ -96,62 +136,78 @@
          CONTENIDO
     ========================== -->
 
-    <main class="container mx-auto px-6 pb-20 flex-grow">
+    <main class="container mx-auto px-6 pb-24 flex-grow">
 
-        <!-- RESUMEN -->
+        <div class="max-w-5xl mx-auto">
 
-        <div class="bg-slate-800 rounded-3xl p-10 max-w-4xl mx-auto">
+            <!-- CARD PRINCIPAL -->
 
-            <h2 class="text-4xl font-bold mb-8">
+            <div class="game-card p-8 md:p-12 rounded-[2rem]">
 
-                Resumen del pedido
+                <!-- HEADER -->
 
-            </h2>
+                <div class="mb-10 text-center md:text-left">
 
-            <!-- MENSAJE -->
+                    <h2 class="section-title mb-4">
 
-            <div id="mensaje"
-                class="hidden mb-6 p-4 rounded-xl text-center font-bold">
+                        Resumen del pedido
+
+                    </h2>
+
+                    <p class="text-gray-400 text-lg">
+
+                        Comprueba la información antes de continuar.
+
+                    </p>
+
+                </div>
+
+                <!-- MENSAJE -->
+
+                <div id="mensaje"
+                    class="hidden mb-8 p-5 rounded-2xl text-center font-bold">
+
+                </div>
+
+                <!-- LISTA -->
+
+                <div id="listaCheckout"
+                    class="space-y-6 mb-12">
+
+                </div>
+
+                <!-- TOTAL -->
+
+                <div
+                    class="border-t border-slate-700 pt-8 mb-10 flex flex-col md:flex-row justify-between items-center gap-4">
+
+                    <span class="text-3xl font-black">
+
+                        Total
+
+                    </span>
+
+                    <span id="totalCheckout"
+                        class="text-5xl font-black text-blue-400">
+
+                        0€
+
+                    </span>
+
+                </div>
+
+                <!-- BOTÓN -->
+
+                <button
+                    id="checkoutButton"
+                    onclick="realizarCheckout()"
+                    class="btn-primary w-full py-5 text-2xl">
+
+                    Confirmar compra
+
+                </button>
 
             </div>
-
-            <!-- JUEGOS -->
-
-            <div id="listaCheckout"
-                class="space-y-6 mb-10">
-
-            </div>
-
-            <!-- TOTAL -->
-
-            <div
-                class="flex justify-between items-center border-t border-slate-700 pt-6 mb-10">
-
-                <span class="text-3xl font-bold">
-
-                    Total
-
-                </span>
-
-                <span id="totalCheckout"
-                    class="text-4xl font-bold text-blue-400">
-
-                    0€
-
-                </span>
-
-            </div>
-
-            <!-- BOTÓN -->
-
-            <button
-                id="checkoutButton"
-                onclick="realizarCheckout()"
-                class="w-full bg-blue-500 hover:bg-blue-600 transition py-5 rounded-2xl text-2xl font-bold">
-
-                Confirmar compra
-
-            </button>
 
         </div>
 
@@ -161,14 +217,14 @@
          FOOTER
     ========================== -->
 
-    <footer class="bg-slate-800 py-10">
+    <footer class="bg-slate-900 border-t border-slate-800 py-12 mt-auto">
 
         <div
-            class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
 
-            <div>
+            <div class="text-center md:text-left">
 
-                <h3 class="text-3xl font-bold text-blue-400 mb-2">
+                <h3 class="logo mb-3">
 
                     GameStore
 
@@ -182,11 +238,11 @@
 
             </div>
 
-            <div class="flex gap-6 text-lg">
+            <div class="flex gap-8 text-lg flex-wrap justify-center">
 
                 <a href="https://www.instagram.com"
                     target="_blank"
-                    class="hover:text-blue-400 transition">
+                    class="footer-link">
 
                     Instagram
 
@@ -194,7 +250,7 @@
 
                 <a href="https://x.com"
                     target="_blank"
-                    class="hover:text-blue-400 transition">
+                    class="footer-link">
 
                     X
 
@@ -202,7 +258,7 @@
 
                 <a href="https://www.youtube.com"
                     target="_blank"
-                    class="hover:text-blue-400 transition">
+                    class="footer-link">
 
                     YouTube
 
@@ -271,7 +327,7 @@
         }
 
         /* =========================
-           MOSTRAR CARRITO
+           MOSTRAR CHECKOUT
         ========================== */
 
         function mostrarCheckout() {
@@ -282,9 +338,26 @@
 
                 listaCheckout.innerHTML = `
 
-                    <div class="bg-red-500 p-6 rounded-2xl text-center">
+                    <div class="bg-slate-800 border border-slate-700 p-12 rounded-3xl text-center">
 
-                        El carrito está vacío.
+                        <h2 class="text-4xl font-black mb-6">
+
+                            El carrito está vacío
+
+                        </h2>
+
+                        <p class="text-gray-400 text-xl mb-10">
+
+                            Añade videojuegos antes de finalizar la compra.
+
+                        </p>
+
+                        <a href="catalogo.html"
+                            class="btn-primary inline-block px-8 py-4 text-xl">
+
+                            Ir al catálogo
+
+                        </a>
 
                     </div>
 
@@ -304,17 +377,19 @@
 
                 listaCheckout.innerHTML += `
 
-                    <div class="bg-slate-700 p-6 rounded-2xl flex justify-between items-center">
+                    <div class="bg-slate-800 border border-slate-700 rounded-3xl p-6 flex flex-col md:flex-row justify-between items-center gap-6">
 
-                        <div>
+                        <!-- INFO -->
 
-                            <h3 class="text-2xl font-bold">
+                        <div class="text-center md:text-left">
+
+                            <h3 class="text-3xl font-black mb-2">
 
                                 ${juego.nombre}
 
                             </h3>
 
-                            <p class="text-gray-400">
+                            <p class="text-gray-400 text-lg">
 
                                 ${juego.plataforma}
 
@@ -322,7 +397,9 @@
 
                         </div>
 
-                        <span class="text-2xl text-blue-400 font-bold">
+                        <!-- PRECIO -->
+
+                        <span class="text-4xl font-black text-blue-400">
 
                             ${juego.precio.toFixed(2)}€
 
@@ -387,7 +464,7 @@
                 ========================== */
 
                 mensaje.className =
-                    "bg-green-500 mb-6 p-4 rounded-xl text-center font-bold";
+                    "bg-green-500/20 border border-green-500/40 mb-6 p-5 rounded-2xl text-center font-bold text-green-300";
 
                 mensaje.textContent =
                     "Compra realizada correctamente";
@@ -420,7 +497,7 @@
                 console.error(error);
 
                 mensaje.className =
-                    "bg-red-500 mb-6 p-4 rounded-xl text-center font-bold";
+                    "bg-red-500/20 border border-red-500/40 mb-6 p-5 rounded-2xl text-center font-bold text-red-300";
 
                 mensaje.textContent =
                     error.message;

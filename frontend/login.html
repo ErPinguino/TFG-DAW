@@ -13,124 +13,166 @@
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
 </head>
 
-<body class="bg-slate-900 text-white min-h-screen flex items-center justify-center px-6">
+<body class="min-h-screen flex items-center justify-center px-6 relative overflow-y-auto py-10 text-white">
+
+    <!-- =========================
+         BACKGROUND
+    ========================== -->
+
+    <div class="absolute inset-0 bg-slate-950"></div>
+
+    <div
+        class="absolute top-[-200px] left-[-150px] w-[500px] h-[500px] bg-blue-500/10 blur-[140px] rounded-full">
+    </div>
+
+    <div
+        class="absolute bottom-[-200px] right-[-150px] w-[500px] h-[500px] bg-cyan-400/10 blur-[140px] rounded-full">
+    </div>
 
     <!-- =========================
          LOGIN CARD
     ========================== -->
 
-    <div class="bg-slate-800 w-full max-w-md p-10 rounded-3xl shadow-2xl">
+    <div class="relative z-10 w-full max-w-md">
 
-        <!-- LOGO -->
+        <div
+            class="bg-slate-900/80 backdrop-blur-2xl border border-slate-800 rounded-[2.5rem] p-10 shadow-2xl">
 
-        <div class="text-center mb-10">
+            <!-- LOGO -->
 
-            <h1 class="text-5xl font-bold text-blue-400 mb-4">
+            <div class="text-center mb-10">
 
-                GameStore
+                <h1 class="text-6xl font-black gradient-text mb-4">
 
-            </h1>
+                    GameStore
 
-            <p class="text-gray-400 text-lg">
+                </h1>
 
-                Inicia sesión para continuar
+                <p class="text-slate-400 text-lg leading-relaxed">
 
-            </p>
+                    Inicia sesión y continúa tu aventura gaming.
 
-        </div>
-
-        <!-- ERROR -->
-
-        <div id="errorBox"
-            class="hidden bg-red-500 text-white p-4 rounded-xl mb-6 text-center">
-
-        </div>
-
-        <!-- FORM -->
-
-        <form id="loginForm"
-            class="space-y-6">
-
-            <!-- EMAIL / USERNAME -->
-
-            <div>
-
-                <label class="block mb-2 text-lg">
-
-                    Usuario o email
-
-                </label>
-
-                <input
-                    type="text"
-                    id="username"
-                    required
-                    class="w-full p-4 rounded-xl bg-slate-700 border border-slate-600 focus:outline-none focus:border-blue-500">
+                </p>
 
             </div>
 
-            <!-- PASSWORD -->
+            <!-- ERROR -->
 
-            <div>
-
-                <label class="block mb-2 text-lg">
-
-                    Contraseña
-
-                </label>
-
-                <input
-                    type="password"
-                    id="password"
-                    required
-                    class="w-full p-4 rounded-xl bg-slate-700 border border-slate-600 focus:outline-none focus:border-blue-500">
+            <div id="errorBox"
+                class="hidden bg-red-500/20 border border-red-500/30 text-red-300 p-4 rounded-2xl mb-6 text-center font-semibold">
 
             </div>
 
-            <!-- BOTÓN -->
+            <!-- FORM -->
 
-            <button
-                type="submit"
-                id="loginButton"
-                class="w-full bg-blue-500 hover:bg-blue-600 transition py-4 rounded-xl text-xl font-bold">
+            <form id="loginForm"
+                class="space-y-6">
 
-                Iniciar sesión
+                <!-- USERNAME -->
 
-            </button>
+                <div>
 
-        </form>
+                    <label
+                        class="block mb-3 text-slate-300 font-semibold text-lg">
 
-        <!-- REGISTER -->
+                        Usuario o email
 
-        <div class="text-center mt-8">
+                    </label>
 
-            <p class="text-gray-400">
+                    <input
+                        type="text"
+                        id="username"
+                        required
+                        placeholder="Introduce tu usuario"
+                        class="w-full bg-slate-800/80 border border-slate-700 rounded-2xl px-5 py-4 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition">
 
-                ¿No tienes cuenta?
+                </div>
 
-            </p>
+                <!-- PASSWORD -->
 
-            <a href="register.html"
-                class="text-blue-400 hover:underline text-lg">
+                <div>
 
-                Crear cuenta
+                    <label
+                        class="block mb-3 text-slate-300 font-semibold text-lg">
 
-            </a>
+                        Contraseña
 
-        </div>
+                    </label>
 
-        <!-- VOLVER -->
+                    <input
+                        type="password"
+                        id="password"
+                        required
+                        placeholder="••••••••"
+                        class="w-full bg-slate-800/80 border border-slate-700 rounded-2xl px-5 py-4 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition">
 
-        <div class="text-center mt-8">
+                </div>
 
-            <a href="index.html"
-                class="text-gray-400 hover:text-white transition">
+                <!-- BUTTON -->
 
-                ← Volver al inicio
+                <button
+                    type="submit"
+                    id="loginButton"
+                    class="btn-primary w-full py-5 text-xl mt-4">
 
-            </a>
+                    Iniciar sesión
+
+                </button>
+
+            </form>
+
+            <!-- REGISTER -->
+
+            <div class="text-center mt-10">
+
+                <p class="text-slate-400 mb-3">
+
+                    ¿No tienes cuenta?
+
+                </p>
+
+                <a href="register.html"
+                    class="text-blue-400 hover:text-blue-300 transition font-bold text-lg">
+
+                    Crear cuenta
+
+                </a>
+
+            </div>
+
+            <!-- DIVIDER -->
+
+            <div class="flex items-center gap-4 my-10">
+
+                <div class="flex-1 h-px bg-slate-700"></div>
+
+                <span class="text-slate-500 text-sm tracking-[0.3em] uppercase">
+
+                    GameStore
+
+                </span>
+
+                <div class="flex-1 h-px bg-slate-700"></div>
+
+            </div>
+
+            <!-- BACK HOME -->
+
+            <div class="text-center">
+
+                <a href="index.html"
+                    class="text-slate-400 hover:text-white transition text-lg">
+
+                    ← Volver al inicio
+
+                </a>
+
+            </div>
 
         </div>
 
@@ -185,10 +227,6 @@
 
             try {
 
-                /* ==================================
-                   OAuth2PasswordRequestForm
-                ================================== */
-
                 const formData =
                     new URLSearchParams();
 
@@ -213,10 +251,6 @@
                 const data =
                     await respuesta.json();
 
-                /* ==================================
-                   ERROR LOGIN
-                ================================== */
-
                 if (!respuesta.ok) {
 
                     throw new Error(
@@ -226,20 +260,10 @@
 
                 }
 
-                /* ==================================
-                   GUARDAR TOKEN
-                ================================== */
-
                 localStorage.setItem(
                     "token",
                     data.access_token
                 );
-
-                /* ==================================
-                   LOGIN OK
-                ================================== */
-
-                alert("Login correcto");
 
                 window.location.href =
                     "catalogo.html";

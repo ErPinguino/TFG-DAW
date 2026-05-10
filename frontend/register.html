@@ -15,149 +15,182 @@
 
 </head>
 
-<body class="bg-slate-900 text-white min-h-screen flex items-center justify-center px-6">
+<body class="bg-slate-950 text-white min-h-screen flex items-center justify-center px-6 relative overflow-hidden">
+
+    <!-- =========================
+         FONDO
+    ========================== -->
+
+    <div class="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-slate-950 to-purple-900/20"></div>
+
+    <div class="absolute top-0 left-0 w-96 h-96 bg-blue-500/10 blur-3xl rounded-full"></div>
+
+    <div class="absolute bottom-0 right-0 w-96 h-96 bg-purple-500/10 blur-3xl rounded-full"></div>
 
     <!-- =========================
          REGISTER CARD
     ========================== -->
 
-    <div class="bg-slate-800 w-full max-w-md p-10 rounded-3xl shadow-2xl">
+    <div class="relative z-10 w-full max-w-md">
 
-        <!-- LOGO -->
+        <div class="bg-slate-900/90 backdrop-blur-xl border border-slate-800 p-10 rounded-[2rem] shadow-2xl">
 
-        <div class="text-center mb-10">
+            <!-- LOGO -->
 
-            <h1 class="text-5xl font-bold text-blue-400 mb-4">
+            <div class="text-center mb-10">
 
-                GameStore
+                <h1 class="text-5xl font-black mb-4 bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
 
-            </h1>
+                    GameStore
 
-            <p class="text-gray-400 text-lg">
+                </h1>
 
-                Crea tu cuenta para comenzar
+                <p class="text-slate-400 text-lg">
 
-            </p>
+                    Crea tu cuenta y empieza a jugar
 
-        </div>
-
-        <!-- ERROR -->
-
-        <div id="errorBox"
-            class="hidden bg-red-500 text-white p-4 rounded-xl mb-6 text-center">
-
-        </div>
-
-        <!-- SUCCESS -->
-
-        <div id="successBox"
-            class="hidden bg-green-500 text-white p-4 rounded-xl mb-6 text-center">
-
-        </div>
-
-        <!-- FORM -->
-
-        <form id="registerForm"
-            class="space-y-6">
-
-            <!-- USERNAME -->
-
-            <div>
-
-                <label class="block mb-2 text-lg">
-
-                    Nombre de usuario
-
-                </label>
-
-                <input
-                    type="text"
-                    id="username"
-                    required
-                    minlength="3"
-                    class="w-full p-4 rounded-xl bg-slate-700 border border-slate-600 focus:outline-none focus:border-blue-500">
+                </p>
 
             </div>
 
-            <!-- EMAIL -->
+            <!-- ERROR -->
 
-            <div>
-
-                <label class="block mb-2 text-lg">
-
-                    Email
-
-                </label>
-
-                <input
-                    type="email"
-                    id="email"
-                    required
-                    class="w-full p-4 rounded-xl bg-slate-700 border border-slate-600 focus:outline-none focus:border-blue-500">
+            <div id="errorBox"
+                class="hidden bg-red-500/20 border border-red-500/30 text-red-300 p-4 rounded-2xl mb-6 text-center">
 
             </div>
 
-            <!-- PASSWORD -->
+            <!-- SUCCESS -->
 
-            <div>
-
-                <label class="block mb-2 text-lg">
-
-                    Contraseña
-
-                </label>
-
-                <input
-                    type="password"
-                    id="password"
-                    required
-                    minlength="8"
-                    class="w-full p-4 rounded-xl bg-slate-700 border border-slate-600 focus:outline-none focus:border-blue-500">
+            <div id="successBox"
+                class="hidden bg-green-500/20 border border-green-500/30 text-green-300 p-4 rounded-2xl mb-6 text-center">
 
             </div>
 
-            <!-- BUTTON -->
+            <!-- FORM -->
 
-            <button
-                type="submit"
-                id="registerButton"
-                class="w-full bg-blue-500 hover:bg-blue-600 transition py-4 rounded-xl text-xl font-bold">
+            <form id="registerForm"
+                class="space-y-6">
 
-                Crear cuenta
+                <!-- USERNAME -->
 
-            </button>
+                <div>
 
-        </form>
+                    <label class="block mb-3 text-slate-300 font-semibold">
 
-        <!-- LOGIN -->
+                        Nombre de usuario
 
-        <div class="text-center mt-8">
+                    </label>
 
-            <p class="text-gray-400">
+                    <input
+                        type="text"
+                        id="username"
+                        required
+                        minlength="3"
+                        placeholder="Tu nombre de usuario"
+                        class="w-full p-4 rounded-2xl bg-slate-800 border border-slate-700 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition">
 
-                ¿Ya tienes cuenta?
+                </div>
 
-            </p>
+                <!-- EMAIL -->
 
-            <a href="login.html"
-                class="text-blue-400 hover:underline text-lg">
+                <div>
 
-                Iniciar sesión
+                    <label class="block mb-3 text-slate-300 font-semibold">
 
-            </a>
+                        Email
 
-        </div>
+                    </label>
 
-        <!-- HOME -->
+                    <input
+                        type="email"
+                        id="email"
+                        required
+                        placeholder="correo@email.com"
+                        class="w-full p-4 rounded-2xl bg-slate-800 border border-slate-700 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition">
 
-        <div class="text-center mt-8">
+                </div>
 
-            <a href="index.html"
-                class="text-gray-400 hover:text-white transition">
+                <!-- PASSWORD -->
 
-                ← Volver al inicio
+                <div>
 
-            </a>
+                    <label class="block mb-3 text-slate-300 font-semibold">
+
+                        Contraseña
+
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        required
+                        minlength="8"
+                        placeholder="Mínimo 8 caracteres"
+                        class="w-full p-4 rounded-2xl bg-slate-800 border border-slate-700 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition">
+
+                </div>
+
+                <!-- BUTTON -->
+
+                <button
+                    type="submit"
+                    id="registerButton"
+                    class="w-full bg-gradient-to-r from-blue-500 to-cyan-400 hover:scale-[1.02] transition transform py-4 rounded-2xl text-xl font-bold shadow-lg shadow-blue-500/20">
+
+                    Crear cuenta
+
+                </button>
+
+            </form>
+
+            <!-- LOGIN -->
+
+            <div class="text-center mt-8">
+
+                <p class="text-slate-400 mb-2">
+
+                    ¿Ya tienes cuenta?
+
+                </p>
+
+                <a href="login.html"
+                    class="text-blue-400 hover:text-blue-300 transition font-semibold">
+
+                    Iniciar sesión
+
+                </a>
+
+            </div>
+
+            <!-- DIVIDER -->
+
+            <div class="flex items-center gap-4 my-8">
+
+                <div class="flex-1 h-px bg-slate-700"></div>
+
+                <span class="text-slate-500 text-sm">
+
+                    GAMESTORE
+
+                </span>
+
+                <div class="flex-1 h-px bg-slate-700"></div>
+
+            </div>
+
+            <!-- HOME -->
+
+            <div class="text-center">
+
+                <a href="index.html"
+                    class="text-slate-400 hover:text-white transition">
+
+                    ← Volver al inicio
+
+                </a>
+
+            </div>
 
         </div>
 
@@ -243,10 +276,6 @@
                 const data =
                     await respuesta.json();
 
-                /* =========================
-                   ERROR API
-                ========================== */
-
                 if (!respuesta.ok) {
 
                     throw new Error(
@@ -256,20 +285,12 @@
 
                 }
 
-                /* =========================
-                   SUCCESS
-                ========================== */
-
                 successBox.textContent =
                     "Cuenta creada correctamente";
 
                 successBox.classList.remove("hidden");
 
                 registerForm.reset();
-
-                /* =========================
-                   REDIRECT LOGIN
-                ========================== */
 
                 setTimeout(() => {
 
