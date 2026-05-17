@@ -11,6 +11,7 @@ class UserORM(Base):
     username = Column(String(50), index = True, unique = True, nullable = False)
     email = Column(String(100), index = True, unique = True, nullable = False)
     hashed_password = Column(String(255), nullable = False)
+    is_admin = Column(Boolean, default=False)
 
     def __repr__(self):
         return f"<User(username={self.username}, email={self.email})>"
@@ -35,6 +36,7 @@ class UserPublicResponse(BaseModel):
 #Output DTO
 class UserResponse(UserPublicResponse):
     id: int
+    is_admin: bool
 
     class Config:
         from_attributes = True

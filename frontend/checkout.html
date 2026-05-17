@@ -18,17 +18,13 @@
 
 </head>
 
-<body class="text-white min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col text-white">
 
-    <!-- =========================
-         NAVBAR
-    ========================== -->
+    <!-- NAVBAR -->
 
-    <nav class="navbar p-4">
+    <nav class="navbar">
 
-        <div class="container mx-auto flex justify-between items-center">
-
-            <!-- LOGO -->
+        <div class="container-custom">
 
             <a href="index.html"
                 class="logo">
@@ -37,63 +33,50 @@
 
             </a>
 
-            <!-- NAV LINKS -->
-
-            <ul class="flex gap-6 items-center flex-wrap">
+            <ul class="nav-menu">
 
                 <li>
-
                     <a href="index.html"
                         class="nav-link">
-
                         Inicio
-
                     </a>
-
                 </li>
 
                 <li>
-
                     <a href="catalogo.html"
                         class="nav-link">
-
                         Catálogo
-
                     </a>
-
                 </li>
 
                 <li>
+                    <a href="pedidos.html"
+                        class="nav-link">
+                        Pedidos
+                    </a>
+                </li>
 
+                <li>
+                    <a href="perfil.html"
+                        class="nav-link">
+                        Perfil
+                    </a>
+                </li>
+
+                <li>
                     <a href="carrito.html"
                         class="nav-link">
 
                         Carrito
 
-                    </a>
+                        <span id="contadorCarrito"
+                            class="cart-badge">
 
-                </li>
+                            0
 
-                <li>
-
-                    <a href="pedidos.html"
-                        class="nav-link">
-
-                        Pedidos
+                        </span>
 
                     </a>
-
-                </li>
-
-                <li>
-
-                    <a href="perfil.html"
-                        class="nav-link">
-
-                        Perfil
-
-                    </a>
-
                 </li>
 
             </ul>
@@ -102,29 +85,27 @@
 
     </nav>
 
-    <!-- =========================
-         HERO
-    ========================== -->
+    <!-- HERO -->
 
-    <section class="py-20 text-center px-6 fade-up">
+    <section class="hero-section-small">
 
-        <div class="max-w-4xl mx-auto">
+        <div class="container-custom text-center">
 
-            <span class="text-blue-400 font-bold tracking-[0.3em] uppercase text-sm">
+            <span class="hero-badge">
 
-                Compra segura
+                CHECKOUT
 
             </span>
 
-            <h1 class="hero-title mt-6 mb-6">
+            <h1 class="hero-title mt-6">
 
                 Finaliza tu pedido
 
             </h1>
 
-            <p class="text-gray-400 text-xl leading-relaxed max-w-2xl mx-auto">
+            <p class="hero-subtitle max-w-3xl mx-auto mt-6">
 
-                Revisa todos los videojuegos seleccionados antes de confirmar tu compra.
+                Revisa tus videojuegos y confirma la compra para añadirlos a tu colección.
 
             </p>
 
@@ -132,80 +113,155 @@
 
     </section>
 
-    <!-- =========================
-         CONTENIDO
-    ========================== -->
+    <!-- CONTENIDO -->
 
-    <main class="container mx-auto px-6 pb-24 flex-grow">
+    <main class="flex-grow pb-24">
 
-        <div class="max-w-5xl mx-auto">
+        <div class="container-custom">
 
-            <!-- CARD PRINCIPAL -->
+            <div class="max-w-5xl mx-auto">
 
-            <div class="game-card p-8 md:p-12 rounded-[2rem]">
+                <div class="game-card p-8 md:p-12">
 
-                <!-- HEADER -->
+                    <!-- MENSAJE -->
 
-                <div class="mb-10 text-center md:text-left">
+                    <div id="mensaje"
+                        class="hidden mb-8 p-5 rounded-2xl text-center font-bold text-xl">
 
-                    <h2 class="section-title mb-4">
+                    </div>
 
-                        Resumen del pedido
+                    <!-- LISTA -->
 
-                    </h2>
+                    <div id="listaCheckout"
+                        class="space-y-6 mb-10">
 
-                    <p class="text-gray-400 text-lg">
+                    </div>
 
-                        Comprueba la información antes de continuar.
+                    <!-- PASARELA DE PAGO -->
 
-                    </p>
+                    <div class="bg-slate-900/70 border border-white/10 rounded-3xl p-8 mb-10">
+
+                        <h2 class="text-3xl font-black mb-8">
+
+                            Datos de pago
+
+                        </h2>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                            <!-- TITULAR -->
+
+                            <div>
+
+                                <label class="block mb-3 text-slate-300 font-bold">
+
+                                    Titular de la tarjeta
+
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="titular"
+                                    placeholder="Nombre Apellido"
+                                    class="w-full bg-slate-950 border border-slate-700 rounded-2xl px-5 py-4 text-white outline-none">
+
+                            </div>
+
+                            <!-- TARJETA -->
+
+                            <div>
+
+                                <label class="block mb-3 text-slate-300 font-bold">
+
+                                    Número de tarjeta
+
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="tarjeta"
+                                    maxlength="19"
+                                    placeholder="1234 5678 9012 3456"
+                                    class="w-full bg-slate-950 border border-slate-700 rounded-2xl px-5 py-4 text-white outline-none">
+
+                            </div>
+
+                            <!-- FECHA -->
+
+                            <div>
+
+                                <label class="block mb-3 text-slate-300 font-bold">
+
+                                    Fecha de expiración
+
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="fecha"
+                                    maxlength="5"
+                                    placeholder="12/28"
+                                    class="w-full bg-slate-950 border border-slate-700 rounded-2xl px-5 py-4 text-white outline-none">
+
+                            </div>
+
+                            <!-- CVV -->
+
+                            <div>
+
+                                <label class="block mb-3 text-slate-300 font-bold">
+
+                                    CVV
+
+                                </label>
+
+                                <input
+                                    type="password"
+                                    id="cvv"
+                                    maxlength="4"
+                                    placeholder="123"
+                                    class="w-full bg-slate-950 border border-slate-700 rounded-2xl px-5 py-4 text-white outline-none">
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- TOTAL -->
+
+                    <div
+                        class="border-t border-slate-700 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
+
+                        <div>
+
+                            <p class="text-slate-400 text-lg mb-2">
+
+                                Total del pedido
+
+                            </p>
+
+                            <h2 id="totalCheckout"
+                                class="text-5xl font-black text-cyan-400">
+
+                                0€
+
+                            </h2>
+
+                        </div>
+
+                        <button
+                            id="checkoutButton"
+                            onclick="realizarCheckout()"
+                            class="btn-primary text-2xl px-10 py-5">
+
+                            Confirmar compra
+
+                        </button>
+
+                    </div>
 
                 </div>
-
-                <!-- MENSAJE -->
-
-                <div id="mensaje"
-                    class="hidden mb-8 p-5 rounded-2xl text-center font-bold">
-
-                </div>
-
-                <!-- LISTA -->
-
-                <div id="listaCheckout"
-                    class="space-y-6 mb-12">
-
-                </div>
-
-                <!-- TOTAL -->
-
-                <div
-                    class="border-t border-slate-700 pt-8 mb-10 flex flex-col md:flex-row justify-between items-center gap-4">
-
-                    <span class="text-3xl font-black">
-
-                        Total
-
-                    </span>
-
-                    <span id="totalCheckout"
-                        class="text-5xl font-black text-blue-400">
-
-                        0€
-
-                    </span>
-
-                </div>
-
-                <!-- BOTÓN -->
-
-                <button
-                    id="checkoutButton"
-                    onclick="realizarCheckout()"
-                    class="btn-primary w-full py-5 text-2xl">
-
-                    Confirmar compra
-
-                </button>
 
             </div>
 
@@ -213,16 +269,13 @@
 
     </main>
 
-    <!-- =========================
-         FOOTER
-    ========================== -->
+    <!-- FOOTER -->
 
-    <footer class="bg-slate-900 border-t border-slate-800 py-12 mt-auto">
+    <footer class="py-12">
 
-        <div
-            class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+        <div class="container-custom flex flex-col md:flex-row justify-between items-center gap-8">
 
-            <div class="text-center md:text-left">
+            <div>
 
                 <h3 class="logo mb-3">
 
@@ -230,7 +283,7 @@
 
                 </h3>
 
-                <p class="text-gray-400">
+                <p class="text-slate-400">
 
                     Tu tienda online de videojuegos.
 
@@ -238,54 +291,19 @@
 
             </div>
 
-            <div class="flex gap-8 text-lg flex-wrap justify-center">
-
-                <a href="https://www.instagram.com"
-                    target="_blank"
-                    class="footer-link">
-
-                    Instagram
-
-                </a>
-
-                <a href="https://x.com"
-                    target="_blank"
-                    class="footer-link">
-
-                    X
-
-                </a>
-
-                <a href="https://www.youtube.com"
-                    target="_blank"
-                    class="footer-link">
-
-                    YouTube
-
-                </a>
-
-            </div>
-
         </div>
 
     </footer>
 
-    <!-- =========================
-         SCRIPT
-    ========================== -->
+    <!-- SCRIPT -->
 
     <script>
 
-        /* =========================
-           API
-        ========================== */
+        const API_CART =
+            "http://127.0.0.1:8000/cart/";
 
-        const API_URL =
+        const API_CHECKOUT =
             "http://127.0.0.1:8000/orders/checkout";
-
-        /* =========================
-           ELEMENTOS
-        ========================== */
 
         const listaCheckout =
             document.getElementById("listaCheckout");
@@ -299,23 +317,13 @@
         const checkoutButton =
             document.getElementById("checkoutButton");
 
-        /* =========================
-           TOKEN
-        ========================== */
+        const contadorCarrito =
+            document.getElementById("contadorCarrito");
 
         const token =
             localStorage.getItem("token");
 
-        /* =========================
-           CARRITO
-        ========================== */
-
-        let carrito =
-            JSON.parse(localStorage.getItem("carrito")) || [];
-
-        /* =========================
-           VALIDAR LOGIN
-        ========================== */
+        let carrito = [];
 
         if (!token) {
 
@@ -326,11 +334,64 @@
 
         }
 
-        /* =========================
-           MOSTRAR CHECKOUT
-        ========================== */
+        async function cargarCarrito() {
 
-        function mostrarCheckout() {
+            try {
+
+                const respuesta =
+                    await fetch(API_CART, {
+
+                        headers: {
+
+                            "Authorization":
+                                `Bearer ${token}`
+
+                        }
+
+                    });
+
+                const data =
+                    await respuesta.json();
+
+                if (!respuesta.ok) {
+
+                    throw new Error(
+                        data.detail ||
+                        "Error al cargar carrito"
+                    );
+
+                }
+
+                carrito = data.items || [];
+
+                contadorCarrito.textContent =
+                    carrito.length;
+
+                mostrarCheckout(data.total_price || 0);
+
+            } catch (error) {
+
+                console.error(error);
+
+                listaCheckout.innerHTML = `
+
+                    <div class="text-center py-12">
+
+                        <h2 class="text-4xl font-black mb-6 text-red-400">
+
+                            Error al cargar carrito
+
+                        </h2>
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+        function mostrarCheckout(totalBackend) {
 
             listaCheckout.innerHTML = "";
 
@@ -338,30 +399,19 @@
 
                 listaCheckout.innerHTML = `
 
-                    <div class="bg-slate-800 border border-slate-700 p-12 rounded-3xl text-center">
+                    <div class="text-center py-12">
 
-                        <h2 class="text-4xl font-black mb-6">
+                        <h2 class="text-5xl font-black mb-6">
 
                             El carrito está vacío
 
                         </h2>
 
-                        <p class="text-gray-400 text-xl mb-10">
-
-                            Añade videojuegos antes de finalizar la compra.
-
-                        </p>
-
-                        <a href="catalogo.html"
-                            class="btn-primary inline-block px-8 py-4 text-xl">
-
-                            Ir al catálogo
-
-                        </a>
-
                     </div>
 
                 `;
+
+                totalCheckout.textContent = "0€";
 
                 checkoutButton.disabled = true;
 
@@ -369,39 +419,41 @@
 
             }
 
-            let total = 0;
+            checkoutButton.disabled = false;
 
-            carrito.forEach(juego => {
+            carrito.forEach(item => {
 
-                total += juego.precio;
+                const juego = item.game;
 
                 listaCheckout.innerHTML += `
 
-                    <div class="bg-slate-800 border border-slate-700 rounded-3xl p-6 flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div class="bg-slate-900/70 border border-white/5 rounded-3xl p-6 flex justify-between items-center">
 
-                        <!-- INFO -->
-
-                        <div class="text-center md:text-left">
+                        <div>
 
                             <h3 class="text-3xl font-black mb-2">
 
-                                ${juego.nombre}
+                                ${juego.title}
 
                             </h3>
 
-                            <p class="text-gray-400 text-lg">
+                            <p class="text-slate-400 text-lg">
 
-                                ${juego.plataforma}
+                                🎮 ${juego.platform}
+
+                            </p>
+
+                            <p class="text-slate-500">
+
+                                Cantidad: ${item.quantity}
 
                             </p>
 
                         </div>
 
-                        <!-- PRECIO -->
+                        <span class="text-4xl font-black text-cyan-400">
 
-                        <span class="text-4xl font-black text-blue-400">
-
-                            ${juego.precio.toFixed(2)}€
+                            ${(juego.price * item.quantity).toFixed(2)}€
 
                         </span>
 
@@ -412,25 +464,59 @@
             });
 
             totalCheckout.textContent =
-                total.toFixed(2) + "€";
+                totalBackend.toFixed(2) + "€";
 
         }
 
-        /* =========================
-           CHECKOUT
-        ========================== */
-
         async function realizarCheckout() {
+
+            const titular =
+                document.getElementById("titular").value.trim();
+
+            const tarjeta =
+                document.getElementById("tarjeta").value.trim();
+
+            const fecha =
+                document.getElementById("fecha").value.trim();
+
+            const cvv =
+                document.getElementById("cvv").value.trim();
+
+            if (!titular || !tarjeta || !fecha || !cvv) {
+
+                mensaje.className =
+                    "bg-red-500/20 border border-red-500/40 mb-6 p-5 rounded-2xl text-center font-bold text-red-300";
+
+                mensaje.textContent =
+                    "Debes completar todos los datos de pago";
+
+                mensaje.classList.remove("hidden");
+
+                return;
+
+            }
 
             try {
 
                 checkoutButton.disabled = true;
 
                 checkoutButton.textContent =
-                    "Procesando compra...";
+                    "Procesando pago...";
+
+                mensaje.className =
+                    "bg-cyan-500/20 border border-cyan-500/40 mb-6 p-5 rounded-2xl text-center font-bold text-cyan-300";
+
+                mensaje.innerHTML = `
+                
+                    Procesando pago seguro...<br>
+                    Conectando con la pasarela de pago...
+                
+                `;
+
+                mensaje.classList.remove("hidden");
 
                 const respuesta =
-                    await fetch(API_URL, {
+                    await fetch(API_CHECKOUT, {
 
                         method: "POST",
 
@@ -446,10 +532,6 @@
                 const data =
                     await respuesta.json();
 
-                /* =========================
-                   ERROR
-                ========================== */
-
                 if (!respuesta.ok) {
 
                     throw new Error(
@@ -459,38 +541,28 @@
 
                 }
 
-                /* =========================
-                   SUCCESS
-                ========================== */
-
                 mensaje.className =
                     "bg-green-500/20 border border-green-500/40 mb-6 p-5 rounded-2xl text-center font-bold text-green-300";
 
-                mensaje.textContent =
-                    "Compra realizada correctamente";
+                mensaje.innerHTML = `
+                
+                    ✅ Compra realizada correctamente<br><br>
+                    Recibirás toda la información de tu pedido por correo electrónico.
+                
+                `;
 
-                mensaje.classList.remove("hidden");
-
-                /* =========================
-                   LIMPIAR CARRITO
-                ========================== */
-
-                localStorage.removeItem("carrito");
+                contadorCarrito.textContent = 0;
 
                 carrito = [];
 
-                mostrarCheckout();
-
-                /* =========================
-                   REDIRECT
-                ========================== */
+                mostrarCheckout(0);
 
                 setTimeout(() => {
 
                     window.location.href =
-                        "catalogo.html";
+                        "pedidos.html";
 
-                }, 2500);
+                }, 3000);
 
             } catch (error) {
 
@@ -515,11 +587,7 @@
 
         }
 
-        /* =========================
-           INICIAR
-        ========================== */
-
-        mostrarCheckout();
+        cargarCarrito();
 
     </script>
 

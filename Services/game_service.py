@@ -1,5 +1,38 @@
+import os
+import httpx
 from sqlalchemy.orm import Session
-from Models.game import GameORM, GameBase, GameUpate
+from Models.game import GameORM, GameBase, GameUpdate
+
+
+RAWG_API_KEY = os.getenv("RAWG_API_KEY")
+
+RAWG_API_KEY = os.getenv("RAWG_API_KEY")
+
+async def import_game_from_rawg(game_name: str, db: Session):
+    url = f"https://api.rawg.io/api/games?key={RAWG_API_KEY}&search={game_name}"
+    
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url)
+        data = response.json()
+        
+        if not data['results']:
+            return None
+        
+        raw_game = data['results'][0]
+        
+        nuevo_juego = GameORM(
+            title=raw_game['name'],
+            price=59.99, 
+            stock=10,
+            genre=raw_game['genres'][0]['name'] if raw_game['genres'] else "Acción",
+            platform=raw_game['platforms'][0]['platform']['name'] if raw_game['platforms'] else "PC",
+            image_url=raw_game['background_image'] 
+        )
+        
+        db.add(nuevo_juego)
+        db.commit()
+        db.refresh(nuevo_juego)
+        return nuevo_juego
 
 def get_all_games(db: Session):
     return db.query(GameORM).all()

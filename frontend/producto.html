@@ -18,7 +18,7 @@
 
 </head>
 
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col bg-[#0b1120] text-white">
 
     <!-- =========================
          NAVBAR
@@ -101,7 +101,7 @@
 
             <span class="hero-badge">
 
-                DETALLE DEL JUEGO
+                DETALLE DEL VIDEOJUEGO
 
             </span>
 
@@ -113,7 +113,8 @@
 
             <p class="hero-subtitle max-w-3xl mx-auto mt-6">
 
-                Descubre información, plataforma, stock y añade el juego a tu colección.
+                Consulta información del juego, plataforma,
+                stock disponible y añádelo a tu carrito.
 
             </p>
 
@@ -223,6 +224,9 @@
         const API_URL =
             "http://127.0.0.1:8000/games";
 
+        const API_CART =
+            "http://127.0.0.1:8000/cart/add";
+
         /* =========================
            ELEMENTOS
         ========================== */
@@ -232,6 +236,13 @@
 
         const contadorCarrito =
             document.getElementById("contadorCarrito");
+
+        /* =========================
+           TOKEN
+        ========================== */
+
+        const token =
+            localStorage.getItem("token");
 
         /* =========================
            ID JUEGO
@@ -244,70 +255,54 @@
             parametros.get("id");
 
         /* =========================
-           CARRITO
+           CONTADOR CARRITO
         ========================== */
 
-        let carrito =
-            JSON.parse(localStorage.getItem("carrito")) || [];
+        async function actualizarContadorCarrito() {
 
-        contadorCarrito.textContent =
-            carrito.length;
+            if (!token) {
 
-        /* =========================
-           IMÁGENES
-        ========================== */
+                contadorCarrito.textContent = "0";
+                return;
 
-        const imagenes = {
+            }
 
-            "Cyberpunk 2077":
-                "assets/images/cyberpunk.jpg",
+            try {
 
-            "Elden Ring":
-                "assets/images/elden_ring.jpg",
+                const respuesta =
+                    await fetch("http://127.0.0.1:8000/cart/", {
 
-            "GTA V":
-                "assets/images/gta_v.jpg",
+                        headers: {
 
-            "Zelda TOTK":
-                "assets/images/Zelda.jpg",
+                            "Authorization":
+                                `Bearer ${token}`
 
-            "Red Dead Redemption 2":
-                "assets/images/red_dead_2.jpg",
+                        }
 
-            "Hogwarts Legacy":
-                "assets/images/Hogwarts.jpg",
+                    });
 
-            "The Witcher 3":
-                "assets/images/the_witcher_3.jpg",
+                if (!respuesta.ok) {
 
-            "Spider-Man 2":
-                "assets/images/spiderman_2.jpg",
+                    contadorCarrito.textContent = "0";
+                    return;
 
-            "God of War Ragnarök":
-                "assets/images/god_of_war.jpg",
+                }
 
-            "Minecraft":
-                "assets/images/Minecraft.jpg",
+                const carrito =
+                    await respuesta.json();
 
-            "Fortnite":
-                "assets/images/Fortnite.jpg",
+                contadorCarrito.textContent =
+                    carrito.items.length;
 
-            "Call of Duty Black Ops 6":
-                "assets/images/call_of_duty.jpg",
+            } catch (error) {
 
-            "Mario Kart 8 Deluxe":
-                "assets/images/mario_kart_8.jpg",
+                console.error(error);
 
-            "League of Legends":
-                "assets/images/league_of_legends.jpg",
+                contadorCarrito.textContent = "0";
 
-            "Valorant":
-                "assets/images/Valorant.jpg",
+            }
 
-            "EA Sports FC 26":
-                "assets/images/ea_sports.jpg"
-
-        };
+        }
 
         /* =========================
            CARGAR JUEGO
@@ -341,7 +336,7 @@
 
                         <div class="glass-card p-12 text-center">
 
-                            <h2 class="text-4xl font-black mb-5">
+                            <h2 class="text-4xl font-black mb-5 text-red-400">
 
                                 Error
 
@@ -370,7 +365,7 @@
         function mostrarJuego(juego) {
 
             const imagen =
-                imagenes[juego.title] ||
+                juego.image_url ||
                 "assets/images/default.jpg";
 
             const precio =
@@ -382,9 +377,10 @@
 
                 <!-- IMAGEN -->
 
-                <div class="glass-card overflow-hidden p-0">
+                <div class="glass-card overflow-hidden p-0 rounded-[2rem]">
 
                     <img src="${imagen}"
+                        alt="${juego.title}"
                         class="w-full h-full object-cover rounded-[2rem] hover:scale-105 transition duration-500">
 
                 </div>
@@ -425,7 +421,7 @@
 
                             <p class="product-info-value">
 
-                                ${juego.platform}
+                                🎮 ${juego.platform}
 
                             </p>
 
@@ -444,6 +440,24 @@
                             <p class="product-info-value">
 
                                 ${juego.stock} unidades
+
+                            </p>
+
+                        </div>
+
+                        <!-- MULTIJUGADOR -->
+
+                        <div class="product-info-box">
+
+                            <p class="product-info-label">
+
+                                Multijugador
+
+                            </p>
+
+                            <p class="product-info-value">
+
+                                ${juego.multiplayer ? "Sí" : "No"}
 
                             </p>
 
@@ -472,12 +486,7 @@
                     <!-- BOTÓN -->
 
                     <button
-                        onclick="agregarAlCarrito(
-                            ${juego.id},
-                            '${juego.title}',
-                            '${juego.platform}',
-                            ${juego.price}
-                        )"
+                        onclick="agregarAlCarrito(${juego.id})"
                         class="btn-primary w-full text-center text-2xl py-5">
 
                         Añadir al carrito
@@ -491,37 +500,79 @@
         }
 
         /* =========================
-           AÑADIR CARRITO
+           AÑADIR AL CARRITO
         ========================== */
 
-        function agregarAlCarrito(id, nombre, plataforma, precio) {
+        async function agregarAlCarrito(gameId) {
 
-            const producto = {
+            if (!token) {
 
-                id,
-                nombre,
-                plataforma,
-                precio
+                alert("Debes iniciar sesión");
 
-            };
+                window.location.href =
+                    "login.html";
 
-            carrito.push(producto);
+                return;
 
-            localStorage.setItem(
-                "carrito",
-                JSON.stringify(carrito)
-            );
+            }
 
-            contadorCarrito.textContent =
-                carrito.length;
+            try {
 
-            alert("Juego añadido al carrito");
+                const respuesta =
+                    await fetch(API_CART, {
+
+                        method: "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json",
+
+                            "Authorization":
+                                `Bearer ${token}`
+
+                        },
+
+                        body: JSON.stringify({
+
+                            game_id: gameId,
+                            quantity: 1
+
+                        })
+
+                    });
+
+                const data =
+                    await respuesta.json();
+
+                if (!respuesta.ok) {
+
+                    throw new Error(
+                        data.detail ||
+                        "Error al añadir al carrito"
+                    );
+
+                }
+
+                await actualizarContadorCarrito();
+
+                alert("Juego añadido al carrito");
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(error.message);
+
+            }
 
         }
 
         /* =========================
            INICIAR
         ========================== */
+
+        actualizarContadorCarrito();
 
         cargarJuego();
 

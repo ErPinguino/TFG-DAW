@@ -1,6 +1,7 @@
 {
   "name": "gamestore-frontend",
   "version": "1.0.0",
+  "private": true,
   "description": "Frontend de GameStore",
   "scripts": {
     "dev": "live-server",

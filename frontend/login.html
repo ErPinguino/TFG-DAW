@@ -18,7 +18,7 @@
 
 </head>
 
-<body class="min-h-screen flex items-center justify-center px-6 relative overflow-y-auto py-10 text-white">
+<body class="min-h-screen flex items-center justify-center px-6 py-10 relative overflow-y-auto text-white">
 
     <!-- =========================
          BACKGROUND
@@ -88,8 +88,9 @@
                         type="text"
                         id="username"
                         required
+                        autocomplete="username"
                         placeholder="Introduce tu usuario"
-                        class="w-full bg-slate-800/80 border border-slate-700 rounded-2xl px-5 py-4 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition">
+                        class="w-full bg-slate-800/80 border border-slate-700 rounded-2xl px-5 py-4 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-4 focus:ring-cyan-500/10 transition">
 
                 </div>
 
@@ -108,8 +109,9 @@
                         type="password"
                         id="password"
                         required
+                        autocomplete="current-password"
                         placeholder="••••••••"
-                        class="w-full bg-slate-800/80 border border-slate-700 rounded-2xl px-5 py-4 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition">
+                        class="w-full bg-slate-800/80 border border-slate-700 rounded-2xl px-5 py-4 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-4 focus:ring-cyan-500/10 transition">
 
                 </div>
 
@@ -137,7 +139,7 @@
                 </p>
 
                 <a href="register.html"
-                    class="text-blue-400 hover:text-blue-300 transition font-bold text-lg">
+                    class="text-cyan-400 hover:text-cyan-300 transition font-bold text-lg">
 
                     Crear cuenta
 
@@ -191,6 +193,9 @@
         const API_URL =
             "http://127.0.0.1:8000/auth/login";
 
+        const CART_API =
+            "http://127.0.0.1:8000/cart";
+
         /* =========================
            ELEMENTOS
         ========================== */
@@ -203,6 +208,65 @@
 
         const loginButton =
             document.getElementById("loginButton");
+
+        /* =========================
+           REDIRECT SI YA LOGIN
+        ========================== */
+
+        const token =
+            localStorage.getItem("token");
+
+        if (token) {
+
+            window.location.href =
+                "catalogo.html";
+
+        }
+
+        /* =========================
+           SINCRONIZAR CARRITO
+        ========================== */
+
+        async function sincronizarCarrito(token) {
+
+            try {
+
+                const respuesta =
+                    await fetch(CART_API, {
+
+                        headers: {
+
+                            "Authorization":
+                                `Bearer ${token}`
+
+                        }
+
+                    });
+
+                if (!respuesta.ok) {
+
+                    return;
+
+                }
+
+                const carritoBackend =
+                    await respuesta.json();
+
+                localStorage.setItem(
+                    "carrito",
+                    JSON.stringify(carritoBackend)
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Error sincronizando carrito:",
+                    error
+                );
+
+            }
+
+        }
 
         /* =========================
            LOGIN
@@ -220,7 +284,7 @@
                 "Iniciando sesión...";
 
             const username =
-                document.getElementById("username").value;
+                document.getElementById("username").value.trim();
 
             const password =
                 document.getElementById("password").value;
@@ -240,8 +304,10 @@
                         method: "POST",
 
                         headers: {
+
                             "Content-Type":
                                 "application/x-www-form-urlencoded"
+
                         },
 
                         body: formData
@@ -255,15 +321,40 @@
 
                     throw new Error(
                         data.detail ||
-                        "Error al iniciar sesión"
+                        "Credenciales incorrectas"
                     );
 
                 }
+
+                /* =========================
+                   GUARDAR TOKEN
+                ========================== */
 
                 localStorage.setItem(
                     "token",
                     data.access_token
                 );
+
+                if (data.user) {
+
+                    localStorage.setItem(
+                        "usuario",
+                        JSON.stringify(data.user)
+                    );
+
+                }
+
+                /* =========================
+                   SINCRONIZAR CARRITO
+                ========================== */
+
+                await sincronizarCarrito(
+                    data.access_token
+                );
+
+                /* =========================
+                   REDIRECT
+                ========================== */
 
                 window.location.href =
                     "catalogo.html";

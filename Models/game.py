@@ -16,6 +16,7 @@ class GameORM(Base):
     release_year = Column(Integer, nullable=True)
     multiplayer = Column(Boolean, default=False)
     stock = Column(Integer, default=0, nullable=False)
+    image_url = Column(String, nullable=True)
 
     def __repr__(self):
         return f"<Game(title={self.title}, genre={self.genre}, platform={self.platform}, price={self.price}, release_year={self.release_year}, multiplayer={self.multiplayer})>"
@@ -32,6 +33,7 @@ class GameBase(BaseModel):
     release_year: Optional[int] = Field(None, ge=1970, lt=2100)
     multiplayer: bool = False
     stock: Optional[int] = Field(None, ge=0, lt=1000)
+    image_url: Optional[str] = Field(None, description="URL of the game's image")
 
 #Output DTO
 
@@ -45,7 +47,7 @@ class GameResponse(GameBase):
 
 #Patch DTO
 
-class GameUpate(BaseModel):
+class GameUpdate(BaseModel):
     title: Optional[str] = None
     genre: Optional[str] = None
     platform: Optional[str] = None
@@ -53,6 +55,6 @@ class GameUpate(BaseModel):
     release_year: Optional[int] = Field(None, ge=1970, lt=2100)
     multiplayer: Optional[bool] = None
     stock: Optional[int] = Field(None, ge=0, lt=1000)
-
+    image_url: Optional[str] = Field(None, description="URL of the game's image")
     class Config:
         from_attributes = True
