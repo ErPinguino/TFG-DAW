@@ -34,8 +34,51 @@ async def import_game_from_rawg(game_name: str, db: Session):
         db.refresh(nuevo_juego)
         return nuevo_juego
 
-def get_all_games(db: Session):
-    return db.query(GameORM).all()
+def get_all_games(
+    db: Session, 
+    page: int, 
+    size: int, 
+    genre: str = None, 
+    platform: str = None, 
+    search: str = None
+):
+    query = db.query(GameORM).filter(GameORM.is_active == True)
+
+    traducciones_generos = {
+        "acción": "Action",
+        "accion": "Action",
+        "rol": "RPG",
+        "rpg": "RPG",
+        "disparos": "Shooter",
+        "estrategia": "Strategy",
+        "indie": "Indie",
+        "aventura": "Adventure",
+        "carreras": "Racing",
+        "deportes": "Sports",
+        "lucha": "Fighting",
+        "simulación": "Simulation",
+        "simulacion": "Simulation"
+    }
+
+    if genre:
+        genre_lower = genre.lower().strip()
+        
+        
+        genre_filtrar = traducciones_generos.get(genre_lower, genre)
+        
+        query = query.filter(GameORM.genre.ilike(f"%{genre_filtrar}%"))
+        
+    if platform:
+        query = query.filter(GameORM.platform.ilike(f"%{platform}%"))
+        
+    if search:
+        query = query.filter(GameORM.title.ilike(f"%{search}%"))
+    
+    # 5. Lógica de Paginación (Offset y Limit)
+    offset = (page - 1) * size
+    
+    # 6. Ejecutamos y devolvemos los resultados recortados
+    return query.offset(offset).limit(size).all()
 
 def get_game_by_id(db: Session, game_id: int):
     return db.query(GameORM).filter(GameORM.id == game_id).first()
@@ -54,3 +97,13 @@ def update_game_stock(db: Session, game_id: int, new_stock: int):
         db.commit()
         db.refresh(game)
     return game
+
+def delete_game(db: Session, game_id: int):
+    db_game = db.query(GameORM).filter(GameORM.id == game_id).first()
+    
+    if db_game:
+        db_game.is_active = False 
+        db.commit()
+        db.refresh(db_game)
+        
+    return db_game

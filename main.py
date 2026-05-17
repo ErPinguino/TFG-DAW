@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from Models import cart, game, order, user
 
 from Routes import (
+    admin_routes,
     cart_routes,
     game_routes,
     order_routes,
@@ -66,6 +67,7 @@ app.include_router(cart_routes.router)
 
 app.include_router(order_routes.router)
 
+app.include_router(admin_routes.router)
 
 
 @app.get("/")

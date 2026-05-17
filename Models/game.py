@@ -17,6 +17,7 @@ class GameORM(Base):
     multiplayer = Column(Boolean, default=False)
     stock = Column(Integer, default=0, nullable=False)
     image_url = Column(String, nullable=True)
+    is_active = Column(Boolean, default=True, nullable=False)
 
     def __repr__(self):
         return f"<Game(title={self.title}, genre={self.genre}, platform={self.platform}, price={self.price}, release_year={self.release_year}, multiplayer={self.multiplayer})>"

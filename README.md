@@ -15,7 +15,8 @@
 7. [Endpoints de la API](#endpoints-de-la-api)
 8. [Seguridad y Autenticación](#seguridad-y-autenticación)
 9. [Base de Datos](#base-de-datos)
-10. [Quick Start](#quick-start)
+10. [Testing](#testing)
+11. [Quick Start](#quick-start)
 
 ---
 
@@ -25,9 +26,12 @@
 
 - **Seguridad Robusta**: Hashing de contraseñas con Passlib (Bcrypt) y protección de rutas mediante Bearer Tokens (JWT).
 - **Base de Datos en la Nube**: Migración a PostgreSQL gestionado en Supabase con conexión optimizada mediante Transaction Pooler.
-- **Catálogo Real**: Integración con la RAWG API para importar títulos reales con imagen, género y plataforma.
+- **Catálogo Inteligente**: Integración con la RAWG API, paginación, filtros avanzados y normalización de idioma (español → inglés) de forma transparente.
+- **Borrado Lógico (Soft Delete)**: Los juegos eliminados no se borran físicamente, preservando la integridad referencial del histórico de pedidos.
+- **Panel de Administración**: Dashboard analítico con métricas en tiempo real, ingresos reales y alertas de stock bajo, protegido por rol de administrador.
 - **Gestión de Carrito**: Sistema completo de persistencia para el carrito de compras ligado a usuarios autenticados.
 - **Sistema de Pedidos**: Proceso de checkout que convierte el carrito en un pedido cerrado, registrando el precio histórico y restando stock.
+- **Historial Financiero Inmutable**: El historial de compras del cliente refleja siempre el precio real pagado en el momento de la compra.
 - **Configuración Segura**: Manejo de claves y variables críticas mediante archivos de entorno.
 - **Soporte Frontend**: Configuración de CORS lista para la integración con clientes modernos (Vite/React).
 
@@ -48,6 +52,7 @@
 | httpx            | Latest   | Cliente HTTP asíncrono para integración con APIs    |
 | python-multipart | Latest   | Soporte de formularios para Login/OAuth2 en FastAPI |
 | Uvicorn          | Latest   | Servidor ASGI con soporte hot-reload                |
+| pytest           | Latest   | Framework de testing automatizado                   |
 
 ---
 
@@ -56,21 +61,25 @@
 ```
 TFG-DAW/
 ├── Models/
-│   ├── game.py           # GameORM (incluye image_url) + esquemas Pydantic
-│   ├── user.py           # UserORM + esquemas Pydantic
+│   ├── game.py           # GameORM (image_url, is_active) + esquemas Pydantic
+│   ├── user.py           # UserORM (is_admin) + esquemas Pydantic
 │   ├── cart.py           # CartORM y CartItemORM
-│   └── order.py          # OrderORM y OrderItemORM
+│   └── order.py          # OrderORM y OrderItemORM (total_price, status)
 ├── Routes/
-│   ├── game_routes.py    # Endpoints /games (incluye importación RAWG)
+│   ├── game_routes.py    # Endpoints /games (filtros, paginación, importación RAWG)
 │   ├── user_routes.py    # Endpoints /auth (Login/Register)
 │   ├── cart_routes.py    # Endpoints /cart (Protegidos)
-│   └── order_routes.py   # Endpoints /orders (Protegidos)
+│   ├── order_routes.py   # Endpoints /orders (Protegidos)
+│   └── admin_routes.py   # Endpoints /admin (Solo administradores)
 ├── Services/
-│   ├── game_service.py   # Lógica de catálogo e integración RAWG
+│   ├── game_service.py   # Catálogo, integración RAWG, normalización de idioma
 │   ├── user_service.py   # Gestión de usuarios y hashing
 │   ├── auth_service.py   # Validación JWT y dependencias
 │   ├── cart_service.py   # Lógica del carrito de compra
-│   └── order_service.py  # Lógica de checkout y pedidos
+│   ├── order_service.py  # Lógica de checkout y pedidos
+│   └── admin_service.py  # Métricas y agregaciones del dashboard
+├── tests/
+│   └── test_main.py      # Suite de tests de integración con pytest
 ├── .env                  # Variables sensibles (No incluido en Git)
 ├── database.py           # Motor SQLAlchemy + get_db()
 ├── main.py               # Entrada principal + Middleware CORS
@@ -80,12 +89,12 @@ TFG-DAW/
 
 ### Responsabilidades por Capa
 
-| Capa         | Responsabilidad                                                                       |
-|--------------|---------------------------------------------------------------------------------------|
-| **Models**   | Define las clases ORM (`UserORM`, `GameORM`, `OrderORM`...) y los esquemas Pydantic   |
-| **Services** | Hashing de contraseñas, validaciones de negocio, gestión de stock y pedidos           |
-| **Routes**   | Endpoints HTTP, mapeo a servicios e inyección de sesión de base de datos              |
-| **database** | Configuración del motor SQLAlchemy y dependencia `get_db()`                           |
+| Capa         | Responsabilidad                                                                         |
+|--------------|-----------------------------------------------------------------------------------------|
+| **Models**   | Define las clases ORM (`UserORM`, `GameORM`, `OrderORM`...) y los esquemas Pydantic     |
+| **Services** | Hashing de contraseñas, validaciones de negocio, gestión de stock, pedidos y métricas   |
+| **Routes**   | Endpoints HTTP, mapeo a servicios e inyección de sesión de base de datos                |
+| **database** | Configuración del motor SQLAlchemy y dependencia `get_db()`                             |
 
 ---
 
@@ -183,14 +192,14 @@ python seed_from_api.py
 
 ### Catálogo de Juegos — `/games`
 
-| Método | Ruta                   | Descripción                                   |
-|--------|------------------------|-----------------------------------------------|
-| GET    | `/games/`              | Obtiene todos los juegos del catálogo         |
-| GET    | `/games/{id}`          | Obtiene un juego por su ID                    |
-| POST   | `/games/import/{name}` | Importa un juego desde la RAWG API por nombre |
-| POST   | `/games/`              | Crea un nuevo juego manualmente               |
-| PUT    | `/games/{id}`          | Actualiza un juego existente                  |
-| DELETE | `/games/{id}`          | Elimina un juego del catálogo                 |
+| Método | Ruta                   | Auth | Descripción                                                                         |
+|--------|------------------------|------|-------------------------------------------------------------------------------------|
+| GET    | `/games/`              | No   | Obtiene el catálogo paginado. Parámetros: `page`, `size`, `genre`, `platform`, `search` |
+| GET    | `/games/{id}`          | No   | Obtiene un juego por su ID                                                          |
+| POST   | `/games/import/{name}` | No   | Importa un juego desde la RAWG API por nombre                                       |
+| POST   | `/games/`              | No   | Crea un nuevo juego manualmente                                                     |
+| PUT    | `/games/{id}`          | No   | Actualiza un juego existente                                                        |
+| DELETE | `/games/{id}`          | No   | Soft delete: marca el juego como inactivo sin borrar la fila                        |
 
 ### Carrito de Compra — `/cart` *(Requiere token JWT)*
 
@@ -206,7 +215,13 @@ python seed_from_api.py
 | Método | Ruta               | Descripción                                                                        |
 |--------|--------------------|------------------------------------------------------------------------------------|
 | POST   | `/orders/checkout` | Convierte el carrito en un pedido cerrado, registra precio histórico y resta stock |
-| GET    | `/orders/`         | Obtiene el historial de pedidos del usuario autenticado                            |
+| GET    | `/orders/me`       | Obtiene el historial de pedidos del usuario autenticado con título y precio real   |
+
+### Panel de Administración — `/admin` *(Requiere token JWT + rol administrador)*
+
+| Método | Ruta                | Descripción                                                         |
+|--------|---------------------|---------------------------------------------------------------------|
+| GET    | `/admin/dashboard`  | Devuelve métricas en tiempo real: usuarios, juegos activos, valor de inventario, ingresos reales y alertas de stock bajo |
 
 ---
 
@@ -223,6 +238,10 @@ El cliente se autentica en `/auth/login`. El servidor genera un token firmado co
 ```
 Authorization: Bearer <TOKEN>
 ```
+
+### Control de Roles (Admin)
+
+Los endpoints del panel de administración verifican adicionalmente que el usuario autenticado tenga el campo `is_admin == True`. Cualquier intento de acceso con una cuenta estándar devuelve `403 Forbidden`.
 
 ### Flujo de Registro
 
@@ -248,12 +267,13 @@ El proyecto usa **PostgreSQL** en la nube a través de **Supabase**. La conexió
 
 **Tabla `users`**
 
-| Columna           | Tipo    | Notas                         |
-|-------------------|---------|-------------------------------|
-| `id`              | INTEGER | Clave primaria, autoincrement |
-| `username`        | VARCHAR | Único, no nulo                |
-| `email`           | VARCHAR | Único, formato validado       |
-| `hashed_password` | VARCHAR | Hash bcrypt                   |
+| Columna           | Tipo    | Notas                                   |
+|-------------------|---------|-----------------------------------------|
+| `id`              | INTEGER | Clave primaria, autoincrement           |
+| `username`        | VARCHAR | Único, no nulo                          |
+| `email`           | VARCHAR | Único, formato validado                 |
+| `hashed_password` | VARCHAR | Hash bcrypt                             |
+| `is_admin`        | BOOLEAN | `False` por defecto. Acceso al dashboard |
 
 **Tabla `games`**
 
@@ -261,10 +281,13 @@ El proyecto usa **PostgreSQL** en la nube a través de **Supabase**. La conexió
 |---------------|---------|---------------------------------------------|
 | `id`          | INTEGER | Clave primaria, autoincrement               |
 | `title`       | VARCHAR | Título del juego, no nulo                   |
+| `genre`       | VARCHAR | Género (normalizado al inglés internamente) |
+| `platform`    | VARCHAR | Plataforma                                  |
 | `price`       | FLOAT   | Precio unitario                             |
 | `stock`       | INTEGER | Cantidad disponible                         |
 | `description` | TEXT    | Descripción opcional                        |
 | `image_url`   | VARCHAR | URL de portada (procedente de RAWG)         |
+| `is_active`   | BOOLEAN | `True` = visible en catálogo. Soft delete   |
 
 **Tabla `carts`**
 
@@ -284,11 +307,13 @@ El proyecto usa **PostgreSQL** en la nube a través de **Supabase**. La conexió
 
 **Tabla `orders`**
 
-| Columna      | Tipo     | Notas                          |
-|--------------|----------|--------------------------------|
-| `id`         | INTEGER  | Clave primaria, autoincrement  |
-| `user_id`    | INTEGER  | Clave foránea → `users.id`     |
-| `created_at` | DATETIME | Fecha y hora del pedido        |
+| Columna       | Tipo     | Notas                                           |
+|---------------|----------|-------------------------------------------------|
+| `id`          | INTEGER  | Clave primaria, autoincrement                   |
+| `user_id`     | INTEGER  | Clave foránea → `users.id`                      |
+| `created_at`  | DATETIME | Fecha y hora del pedido                         |
+| `total_price` | FLOAT    | Precio total del pedido en el momento de compra |
+| `status`      | VARCHAR  | Estado del pedido (ej. `completed`)             |
 
 **Tabla `order_items`**
 
@@ -299,6 +324,31 @@ El proyecto usa **PostgreSQL** en la nube a través de **Supabase**. La conexió
 | `game_id`        | INTEGER | Clave foránea → `games.id`                   |
 | `quantity`       | INTEGER | Cantidad comprada                            |
 | `price_at_order` | FLOAT   | Precio histórico en el momento de la compra  |
+
+---
+
+## Testing
+
+El proyecto incluye una suite de tests de integración en `tests/test_main.py` construida con **pytest** y el `TestClient` de FastAPI.
+
+### Estrategia de Testing
+
+Los tests utilizan una base de datos **SQLite en memoria** (`sqlite:///:memory:`) que se inicializa antes de cada ejecución. La inyección de dependencias de FastAPI se sobreescribe mediante `app.dependency_overrides` para sustituir la conexión real a Supabase por la base de datos de test, garantizando el aislamiento total del entorno de producción.
+
+### Tests Implementados
+
+| Test | Descripción |
+|------|-------------|
+| `test_register_user_success` | Verifica que el registro de un nuevo usuario devuelve `200` o `201`. |
+| `test_login_user_success` | Comprueba que el login devuelve un `access_token` válido y lo almacena para los tests posteriores. |
+| `test_get_catalog_public` | Valida que el catálogo público responde correctamente con paginación (`page=1&size=5`). |
+| `test_cart_and_checkout_flow` | **Test de integración end-to-end**: inserta un juego en la BD de test, lo añade al carrito, ejecuta el checkout y verifica que el historial de pedidos refleja el precio real (`60.0`) y el estado `completed`. |
+
+### Ejecución
+
+```bash
+pytest tests/test_main.py -v
+```
 
 ---
 
@@ -328,6 +378,9 @@ uvicorn main:app --reload
 
 # 7. Abrir la documentación interactiva
 # http://127.0.0.1:8000/docs
+
+# 8. (Opcional) Ejecutar los tests
+pytest tests/test_main.py -v
 ```
 
 ---
