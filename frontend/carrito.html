@@ -18,7 +18,7 @@
 
 </head>
 
-<body>
+<body class="min-h-screen flex flex-col">
 
     <!-- =========================
          NAVBAR
@@ -88,29 +88,28 @@
     </nav>
 
     <!-- =========================
-         HERO CARRITO
+         HERO
     ========================== -->
 
-    <section class="py-24">
+    <section class="hero-section-small">
 
         <div class="container-custom text-center">
 
-            <p class="text-cyan-400 uppercase tracking-[0.3em] font-bold mb-6">
+            <span class="hero-badge">
 
                 TU CARRITO
 
-            </p>
+            </span>
 
-            <h1 class="hero-title mb-8">
+            <h1 class="hero-title mt-6">
 
-                Tu carrito gaming
+                Tu colección pendiente
 
             </h1>
 
-            <p class="text-slate-300 text-xl max-w-3xl mx-auto leading-relaxed">
+            <p class="hero-subtitle max-w-3xl mx-auto mt-6">
 
-                Revisa tus juegos favoritos antes de completar la compra
-                y prepárate para empezar una nueva aventura.
+                Revisa tus videojuegos favoritos antes de completar tu compra.
 
             </p>
 
@@ -119,52 +118,24 @@
     </section>
 
     <!-- =========================
-         CONTENIDO CARRITO
+         CONTENIDO
     ========================== -->
 
-    <section class="pb-24">
+    <main class="flex-grow pb-24">
 
         <div class="container-custom">
 
+            <div id="mensaje"
+                class="hidden mb-8 p-5 rounded-2xl text-center font-bold">
+            </div>
+
             <div id="contenedorCarrito">
-
-                <!-- VACÍO -->
-
-                <div class="game-card p-16 text-center max-w-4xl mx-auto">
-
-                    <div class="text-8xl mb-8">
-
-                        🛒
-
-                    </div>
-
-                    <h2 class="text-5xl font-black mb-6">
-
-                        Tu carrito está vacío
-
-                    </h2>
-
-                    <p class="text-slate-400 text-2xl leading-relaxed mb-12 max-w-2xl mx-auto">
-
-                        Explora nuestro catálogo y descubre nuevos videojuegos,
-                        ofertas y aventuras épicas para todas las plataformas.
-
-                    </p>
-
-                    <a href="catalogo.html"
-                        class="btn-primary text-2xl px-10 py-5 inline-block">
-
-                        Ir al catálogo
-
-                    </a>
-
-                </div>
 
             </div>
 
         </div>
 
-    </section>
+    </main>
 
     <!-- =========================
          FOOTER
@@ -228,14 +199,278 @@
 
     <script>
 
+        const API_URL =
+            "http://127.0.0.1:8000/cart";
+
+        const contenedorCarrito =
+            document.getElementById("contenedorCarrito");
+
         const contadorCarrito =
             document.getElementById("contadorCarrito");
 
-        let carrito =
-            JSON.parse(localStorage.getItem("carrito")) || [];
+        const mensaje =
+            document.getElementById("mensaje");
 
-        contadorCarrito.textContent =
-            carrito.length;
+        const token =
+            localStorage.getItem("token");
+
+        let carrito = [];
+
+        if (!token) {
+
+            alert("Debes iniciar sesión");
+
+            window.location.href =
+                "login.html";
+
+        }
+
+        async function cargarCarrito() {
+
+            try {
+
+                const respuesta =
+                    await fetch(API_URL + "/", {
+
+                        headers: {
+
+                            "Authorization":
+                                `Bearer ${token}`
+
+                        }
+
+                    });
+
+                const data =
+                    await respuesta.json();
+
+                if (!respuesta.ok) {
+
+                    throw new Error(
+                        data.detail ||
+                        "Error al cargar carrito"
+                    );
+
+                }
+
+                carrito = data.items || [];
+
+                contadorCarrito.textContent =
+                    carrito.length;
+
+                renderizarCarrito(data.total_price || 0);
+
+            } catch (error) {
+
+                console.error(error);
+
+                mensaje.className =
+                    "bg-red-500/20 border border-red-500/40 mb-8 p-5 rounded-2xl text-center font-bold text-red-300";
+
+                mensaje.textContent =
+                    error.message;
+
+                mensaje.classList.remove("hidden");
+
+            }
+
+        }
+
+        function renderizarCarrito(totalBackend) {
+
+            contenedorCarrito.innerHTML = "";
+
+            if (carrito.length === 0) {
+
+                contenedorCarrito.innerHTML = `
+
+                    <div class="game-card p-16 text-center max-w-4xl mx-auto">
+
+                        <div class="text-8xl mb-8">
+
+                            🛒
+
+                        </div>
+
+                        <h2 class="text-5xl font-black mb-6">
+
+                            Tu carrito está vacío
+
+                        </h2>
+
+                        <p class="text-slate-400 text-2xl leading-relaxed mb-12 max-w-2xl mx-auto">
+
+                            Explora nuestro catálogo y descubre nuevos videojuegos.
+
+                        </p>
+
+                        <a href="catalogo.html"
+                            class="btn-primary text-2xl px-10 py-5 inline-block">
+
+                            Ir al catálogo
+
+                        </a>
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+            let juegosHTML = "";
+
+            carrito.forEach((item) => {
+
+                const juego = item.game;
+
+                juegosHTML += `
+
+                    <div class="game-card p-8 flex flex-col lg:flex-row justify-between items-center gap-8">
+
+                        <div>
+
+                            <h2 class="text-3xl font-black mb-3">
+
+                                ${juego.title}
+
+                            </h2>
+
+                            <p class="text-slate-400 text-lg mb-2">
+
+                                🎮 ${juego.platform}
+
+                            </p>
+
+                            <p class="text-cyan-400 text-3xl font-black">
+
+                                ${juego.price.toFixed(2)}€
+
+                            </p>
+
+                            <p class="text-slate-500 mt-2">
+
+                                Cantidad: ${item.quantity}
+
+                            </p>
+
+                        </div>
+
+                        <button
+                            onclick="eliminarJuego(${juego.id})"
+                            class="bg-red-500 hover:bg-red-600 transition px-6 py-4 rounded-2xl font-bold text-white">
+
+                            Eliminar
+
+                        </button>
+
+                    </div>
+
+                `;
+
+            });
+
+            contenedorCarrito.innerHTML = `
+
+                <div class="space-y-8">
+
+                    ${juegosHTML}
+
+                    <div class="game-card p-10">
+
+                        <div class="flex flex-col lg:flex-row justify-between items-center gap-8">
+
+                            <div>
+
+                                <p class="text-slate-400 text-xl mb-2">
+
+                                    Total del pedido
+
+                                </p>
+
+                                <h2 class="text-6xl font-black text-cyan-400">
+
+                                    ${totalBackend.toFixed(2)}€
+
+                                </h2>
+
+                            </div>
+
+                            <button
+                                onclick="finalizarCompra()"
+                                class="btn-primary text-2xl px-10 py-5">
+
+                                Finalizar compra
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }
+
+        async function eliminarJuego(gameId) {
+
+            try {
+
+                const respuesta =
+                    await fetch(API_URL + "/remove/" + gameId, {
+
+                        method: "DELETE",
+
+                        headers: {
+
+                            "Authorization":
+                                `Bearer ${token}`
+
+                        }
+
+                    });
+
+                const data =
+                    await respuesta.json();
+
+                if (!respuesta.ok) {
+
+                    throw new Error(
+                        data.detail ||
+                        "Error al eliminar juego"
+                    );
+
+                }
+
+                cargarCarrito();
+
+            } catch (error) {
+
+                console.error(error);
+
+                mensaje.className =
+                    "bg-red-500/20 border border-red-500/40 mb-8 p-5 rounded-2xl text-center font-bold text-red-300";
+
+                mensaje.textContent =
+                    error.message;
+
+                mensaje.classList.remove("hidden");
+
+            }
+
+        }
+
+        function finalizarCompra() {
+
+            window.location.href =
+                "checkout.html";
+
+        }
+
+        cargarCarrito();
 
     </script>
 

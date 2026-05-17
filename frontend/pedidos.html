@@ -3,150 +3,165 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<!DOCTYPE html>
 
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
+<html lang="es">
 
-    <title>Mis pedidos | GameStore</title>
+<head>
 
-    <!-- Tailwind -->
-    <script src="https://cdn.tailwindcss.com"></script>
+```
+<meta charset="UTF-8">
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="css/style.css">
+<meta name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+<title>Mis pedidos | GameStore</title>
+
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- CSS -->
+<link rel="stylesheet" href="css/style.css">
+```
 
 </head>
 
 <body class="min-h-screen flex flex-col">
 
-    <!-- =========================
-         NAVBAR
-    ========================== -->
+```
+<!-- =========================
+     NAVBAR
+========================== -->
 
-    <nav class="navbar p-4">
+<nav class="navbar">
 
-        <div class="container mx-auto flex justify-between items-center">
+    <div class="container-custom navbar-container">
 
-            <!-- LOGO -->
+        <!-- LOGO -->
 
-            <a href="index.html"
-                class="logo">
+        <a href="index.html"
+            class="logo">
+
+            GameStore
+
+        </a>
+
+        <!-- MENÚ -->
+
+        <ul class="nav-menu">
+
+            <li>
+
+                <a href="index.html"
+                    class="nav-link">
+
+                    Inicio
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="catalogo.html"
+                    class="nav-link">
+
+                    Catálogo
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="pedidos.html"
+                    class="nav-active">
+
+                    Pedidos
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="perfil.html"
+                    class="nav-link">
+
+                    Perfil
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="carrito.html"
+                    class="nav-link cart-link">
+
+                    Carrito
+
+                    <span id="contadorCarrito"
+                        class="cart-badge">
+
+                        0
+
+                    </span>
+
+                </a>
+
+            </li>
+
+        </ul>
+
+    </div>
+
+</nav>
+
+<!-- =========================
+     HERO
+========================== -->
+
+<section class="hero-section-small">
+
+    <div class="container-custom text-center">
+
+        <span class="hero-badge">
+
+            HISTORIAL DE COMPRAS
+
+        </span>
+
+        <h1 class="hero-title mt-6">
+
+            Tus pedidos en
+
+            <span class="gradient-text">
 
                 GameStore
 
-            </a>
-
-            <!-- MENÚ -->
-
-            <ul class="flex gap-6 items-center flex-wrap">
-
-                <li>
-
-                    <a href="index.html"
-                        class="nav-link">
-
-                        Inicio
-
-                    </a>
-
-                </li>
-
-                <li>
-
-                    <a href="catalogo.html"
-                        class="nav-link">
-
-                        Catálogo
-
-                    </a>
-
-                </li>
-
-                <li>
-
-                    <a href="carrito.html"
-                        class="nav-link">
-
-                        Carrito
-
-                        <span id="contadorCarrito"
-                            class="bg-cyan-400 text-slate-950 px-2 py-1 rounded-full text-sm ml-1 font-bold">
-
-                            0
-
-                        </span>
-
-                    </a>
-
-                </li>
-
-                <li>
-
-                    <a href="pedidos.html"
-                        class="nav-active">
-
-                        Mis pedidos
-
-                    </a>
-
-                </li>
-
-                <li>
-
-                    <a href="perfil.html"
-                        class="nav-link">
-
-                        Perfil
-
-                    </a>
-
-                </li>
-
-            </ul>
-
-        </div>
-
-    </nav>
-
-    <!-- =========================
-         HERO
-    ========================== -->
-
-    <section class="py-20 px-6 text-center fade-up">
-
-        <div class="max-w-4xl mx-auto">
-
-            <span class="badge mb-6 inline-block">
-
-                Historial de compras
-
             </span>
 
-            <h1 class="hero-title mb-6">
+        </h1>
 
-                Tus pedidos en
-                <span class="gradient-text">
-                    GameStore
-                </span>
+        <p class="hero-subtitle max-w-3xl mx-auto mt-6">
 
-            </h1>
+            Consulta todas tus compras realizadas
+            y revisa el estado de tus pedidos.
 
-            <p class="hero-subtitle">
+        </p>
 
-                Consulta todas tus compras realizadas y revisa el estado de tus pedidos.
+    </div>
 
-            </p>
+</section>
 
-        </div>
+<!-- =========================
+     CONTENIDO
+========================== -->
 
-    </section>
+<main class="flex-grow pb-24">
 
-    <!-- =========================
-         CONTENIDO
-    ========================== -->
-
-    <main class="container mx-auto px-6 pb-20 flex-grow">
+    <div class="container-custom">
 
         <!-- MENSAJE -->
 
@@ -160,227 +175,306 @@
         <div id="listaPedidos"
             class="space-y-10 max-w-6xl mx-auto">
 
-        </div>
+            <!-- LOADING -->
 
-    </main>
+            <div class="game-card p-12 text-center">
 
-    <!-- =========================
-         FOOTER
-    ========================== -->
+                <p class="text-3xl text-slate-400">
 
-    <footer class="footer">
-
-        <div
-            class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
-
-            <div>
-
-                <h3 class="logo mb-3">
-
-                    GameStore
-
-                </h3>
-
-                <p class="text-slate-400">
-
-                    Tu tienda online de videojuegos.
+                    Cargando pedidos...
 
                 </p>
 
             </div>
 
-            <div class="flex gap-8 text-lg">
+        </div>
 
-                <a href="https://www.instagram.com"
-                    target="_blank"
-                    class="footer-link">
+    </div>
 
-                    Instagram
+</main>
 
-                </a>
+<!-- =========================
+     FOOTER
+========================== -->
 
-                <a href="https://x.com"
-                    target="_blank"
-                    class="footer-link">
+<footer class="footer">
 
-                    X
+    <div class="container-custom footer-content">
 
-                </a>
+        <div>
 
-                <a href="https://www.youtube.com"
-                    target="_blank"
-                    class="footer-link">
+            <h3 class="logo mb-3">
 
-                    YouTube
+                GameStore
 
-                </a>
+            </h3>
 
-            </div>
+            <p class="text-slate-400">
+
+                Tu tienda online de videojuegos.
+
+            </p>
 
         </div>
 
-    </footer>
+        <div class="footer-links">
 
-    <!-- =========================
-         SCRIPT
-    ========================== -->
+            <a href="https://www.instagram.com"
+                target="_blank"
+                class="footer-link">
 
-    <script>
+                Instagram
 
-        /* =========================
-           API
-        ========================== */
+            </a>
 
-        const API_URL =
-            "http://127.0.0.1:8000/orders/me";
+            <a href="https://x.com"
+                target="_blank"
+                class="footer-link">
 
-        /* =========================
-           ELEMENTOS
-        ========================== */
+                X
 
-        const listaPedidos =
-            document.getElementById("listaPedidos");
+            </a>
 
-        const mensaje =
-            document.getElementById("mensaje");
+            <a href="https://www.youtube.com"
+                target="_blank"
+                class="footer-link">
 
-        const contadorCarrito =
-            document.getElementById("contadorCarrito");
+                YouTube
 
-        /* =========================
-           TOKEN
-        ========================== */
+            </a>
 
-        const token =
-            localStorage.getItem("token");
+        </div>
 
-        /* =========================
-           CARRITO
-        ========================== */
+    </div>
 
-        const carrito =
-            JSON.parse(localStorage.getItem("carrito")) || [];
+</footer>
 
-        contadorCarrito.textContent =
-            carrito.length;
+<!-- =========================
+     SCRIPT
+========================== -->
 
-        /* =========================
-           VALIDAR LOGIN
-        ========================== */
+<script>
 
-        if (!token) {
+    /* =========================
+       API
+    ========================== */
 
-            alert("Debes iniciar sesión");
+    const API_URL =
+        "http://127.0.0.1:8000/orders/me";
 
-            window.location.href =
-                "login.html";
+    const API_CART =
+        "http://127.0.0.1:8000/cart/";
 
-        }
+    /* =========================
+       ELEMENTOS
+    ========================== */
 
-        /* =========================
-           CARGAR PEDIDOS
-        ========================== */
+    const listaPedidos =
+        document.getElementById("listaPedidos");
 
-        async function cargarPedidos() {
+    const mensaje =
+        document.getElementById("mensaje");
 
-            try {
+    const contadorCarrito =
+        document.getElementById("contadorCarrito");
 
-                const respuesta =
-                    await fetch(API_URL, {
+    /* =========================
+       TOKEN
+    ========================== */
 
-                        headers: {
+    const token =
+        localStorage.getItem("token");
 
-                            "Authorization":
-                                `Bearer ${token}`
+    /* =========================
+       CONTADOR CARRITO
+    ========================== */
 
-                        }
+    async function actualizarContadorCarrito() {
 
-                    });
+        try {
 
-                const pedidos =
-                    await respuesta.json();
+            const respuesta =
+                await fetch(API_CART, {
 
-                if (!respuesta.ok) {
+                    headers: {
 
-                    throw new Error(
-                        pedidos.detail ||
-                        "Error al cargar pedidos"
-                    );
+                        "Authorization":
+                            `Bearer ${token}`
 
-                }
+                    }
 
-                mostrarPedidos(pedidos);
+                });
 
-            } catch (error) {
+            if (!respuesta.ok) {
 
-                console.error(error);
-
-                mensaje.className =
-                    "bg-red-500/20 border border-red-500/40 mb-8 p-5 rounded-2xl text-center font-bold text-red-200";
-
-                mensaje.textContent =
-                    error.message;
-
-                mensaje.classList.remove("hidden");
+                throw new Error(
+                    "No se pudo cargar carrito"
+                );
 
             }
 
+            const carrito =
+                await respuesta.json();
+
+            const cantidad =
+                carrito.items
+                    ? carrito.items.length
+                    : 0;
+
+            contadorCarrito.textContent =
+                cantidad;
+
+        } catch (error) {
+
+            console.error(error);
+
+            contadorCarrito.textContent = 0;
+
         }
 
-        /* =========================
-           MOSTRAR PEDIDOS
-        ========================== */
+    }
 
-        function mostrarPedidos(pedidos) {
+    actualizarContadorCarrito();
+
+    /* =========================
+       VALIDAR LOGIN
+    ========================== */
+
+    if (!token) {
+
+        alert("Debes iniciar sesión");
+
+        window.location.href =
+            "login.html";
+
+    }
+
+    /* =========================
+       CARGAR PEDIDOS
+    ========================== */
+
+    async function cargarPedidos() {
+
+        try {
+
+            const respuesta =
+                await fetch(API_URL, {
+
+                    headers: {
+
+                        "Authorization":
+                            `Bearer ${token}`
+
+                    }
+
+                });
+
+            const pedidos =
+                await respuesta.json();
+
+            if (!respuesta.ok) {
+
+                throw new Error(
+                    pedidos.detail ||
+                    "Error al cargar pedidos"
+                );
+
+            }
+
+            mostrarPedidos(pedidos);
+
+        } catch (error) {
+
+            console.error(error);
 
             listaPedidos.innerHTML = "";
 
-            if (pedidos.length === 0) {
+            mensaje.className =
+                "bg-red-500/20 border border-red-500/40 mb-8 p-5 rounded-2xl text-center font-bold text-red-200";
 
-                listaPedidos.innerHTML = `
+            mensaje.textContent =
+                error.message;
 
-                    <div class="game-card p-14 rounded-[2rem] text-center">
+            mensaje.classList.remove("hidden");
 
-                        <div class="max-w-2xl mx-auto">
+            if (
+                error.message.includes("Token") ||
+                error.message.includes("401")
+            ) {
 
-                            <h2 class="text-5xl font-black mb-6">
+                setTimeout(() => {
 
-                                No tienes pedidos
+                    localStorage.removeItem("token");
 
-                            </h2>
+                    window.location.href =
+                        "login.html";
 
-                            <p class="text-slate-400 text-xl mb-10 leading-relaxed">
-
-                                Todavía no has realizado ninguna compra en GameStore.
-
-                            </p>
-
-                            <a href="catalogo.html"
-                                class="btn-primary inline-block text-xl px-10 py-5">
-
-                                Explorar catálogo
-
-                            </a>
-
-                        </div>
-
-                    </div>
-
-                `;
-
-                return;
+                }, 2000);
 
             }
 
-            pedidos.reverse();
+        }
 
-            pedidos.forEach(pedido => {
+    }
 
-                const fecha =
-                    new Date(pedido.created_at)
-                        .toLocaleDateString("es-ES");
+    /* =========================
+       MOSTRAR PEDIDOS
+    ========================== */
 
-                let juegosHTML = "";
+    function mostrarPedidos(pedidos) {
+
+        listaPedidos.innerHTML = "";
+
+        if (!pedidos || pedidos.length === 0) {
+
+            listaPedidos.innerHTML = `
+
+                <div class="game-card p-14 rounded-[2rem] text-center">
+
+                    <div class="max-w-2xl mx-auto">
+
+                        <h2 class="text-5xl font-black mb-6">
+
+                            No tienes pedidos
+
+                        </h2>
+
+                        <p class="text-slate-400 text-xl mb-10 leading-relaxed">
+
+                            Todavía no has realizado ninguna compra en GameStore.
+
+                        </p>
+
+                        <a href="catalogo.html"
+                            class="btn-primary inline-block text-xl px-10 py-5">
+
+                            Explorar catálogo
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+        pedidos.reverse();
+
+        pedidos.forEach(pedido => {
+
+            const fecha =
+                pedido.created_at
+                    ? new Date(pedido.created_at)
+                        .toLocaleDateString("es-ES")
+                    : "Fecha no disponible";
+
+            let juegosHTML = "";
+
+            if (pedido.items && pedido.items.length > 0) {
 
                 pedido.items.forEach(item => {
 
@@ -407,7 +501,7 @@
 
                             <span class="text-cyan-400 text-3xl font-black">
 
-                                ${item.price_at_purchase.toFixed(2)}€
+                                ${(item.price_at_purchase * item.quantity).toFixed(2)}€
 
                             </span>
 
@@ -417,78 +511,97 @@
 
                 });
 
-                listaPedidos.innerHTML += `
+            } else {
 
-                    <div class="game-card p-8 md:p-10 rounded-[2rem]">
+                juegosHTML = `
 
-                        <!-- HEADER -->
+                    <div class="bg-slate-900/70 border border-white/5 rounded-3xl p-6 text-center">
 
-                        <div class="flex flex-col xl:flex-row xl:justify-between xl:items-center gap-8 mb-10">
+                        <p class="text-slate-400">
 
-                            <div>
+                            Este pedido no contiene productos.
 
-                                <span class="badge mb-4 inline-block">
-
-                                    Pedido #${pedido.id}
-
-                                </span>
-
-                                <h2 class="text-4xl md:text-5xl font-black mb-3">
-
-                                    Pedido realizado
-
-                                </h2>
-
-                                <p class="text-slate-400 text-lg">
-
-                                    Fecha:
-                                    ${fecha}
-
-                                </p>
-
-                            </div>
-
-                            <div class="flex flex-col items-start xl:items-end gap-4">
-
-                                <span class="bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 px-5 py-3 rounded-2xl font-bold">
-
-                                    ${pedido.status}
-
-                                </span>
-
-                                <span class="text-5xl font-black gradient-text">
-
-                                    ${pedido.total_price.toFixed(2)}€
-
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                        <!-- ITEMS -->
-
-                        <div class="space-y-5">
-
-                            ${juegosHTML}
-
-                        </div>
+                        </p>
 
                     </div>
 
                 `;
 
-            });
+            }
 
-        }
+            listaPedidos.innerHTML += `
 
-        /* =========================
-           INICIAR
-        ========================== */
+                <div class="game-card p-8 md:p-10 rounded-[2rem]">
 
-        cargarPedidos();
+                    <!-- HEADER -->
 
-    </script>
+                    <div class="flex flex-col xl:flex-row xl:justify-between xl:items-center gap-8 mb-10">
+
+                        <div>
+
+                            <span class="hero-badge mb-4 inline-block">
+
+                                Pedido #${pedido.id}
+
+                            </span>
+
+                            <h2 class="text-4xl md:text-5xl font-black mb-3">
+
+                                Pedido realizado
+
+                            </h2>
+
+                            <p class="text-slate-400 text-lg">
+
+                                Fecha:
+                                ${fecha}
+
+                            </p>
+
+                        </div>
+
+                        <div class="flex flex-col items-start xl:items-end gap-4">
+
+                            <span class="bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 px-5 py-3 rounded-2xl font-bold uppercase">
+
+                                ${pedido.status}
+
+                            </span>
+
+                            <span class="text-5xl font-black gradient-text">
+
+                                ${pedido.total_price.toFixed(2)}€
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ITEMS -->
+
+                    <div class="space-y-5">
+
+                        ${juegosHTML}
+
+                    </div>
+
+                </div>
+
+            `;
+
+        });
+
+    }
+
+    /* =========================
+       INICIAR
+    ========================== */
+
+    cargarPedidos();
+
+</script>
+```
 
 </body>
 

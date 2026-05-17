@@ -191,157 +191,8 @@
 
             <!-- JUEGOS -->
 
-            <div class="featured-games">
-
-                <!-- JUEGO -->
-
-                <div class="featured-game">
-
-                    <img src="assets/images/elden_ring.jpg"
-                        class="featured-image">
-
-                    <div class="featured-info">
-
-                        <h3>Elden Ring</h3>
-
-                        <p>RPG • PC</p>
-
-                    </div>
-
-                    <div class="featured-price">
-
-                        59.99€
-
-                    </div>
-
-                    <a href="catalogo.html"
-                        class="mini-btn">
-
-                        Ver
-
-                    </a>
-
-                </div>
-
-                <!-- JUEGO -->
-
-                <div class="featured-game">
-
-                    <img src="assets/images/cyberpunk.jpg"
-                        class="featured-image">
-
-                    <div class="featured-info">
-
-                        <h3>Cyberpunk 2077</h3>
-
-                        <p>Acción • PS5</p>
-
-                    </div>
-
-                    <div class="featured-price">
-
-                        49.99€
-
-                    </div>
-
-                    <a href="catalogo.html"
-                        class="mini-btn">
-
-                        Ver
-
-                    </a>
-
-                </div>
-
-                <!-- JUEGO -->
-
-                <div class="featured-game">
-
-                    <img src="assets/images/spiderman_2.jpg"
-                        class="featured-image">
-
-                    <div class="featured-info">
-
-                        <h3>Spider-Man 2</h3>
-
-                        <p>Acción • PS5</p>
-
-                    </div>
-
-                    <div class="featured-price">
-
-                        69.99€
-
-                    </div>
-
-                    <a href="catalogo.html"
-                        class="mini-btn">
-
-                        Ver
-
-                    </a>
-
-                </div>
-
-                <!-- JUEGO -->
-
-                <div class="featured-game">
-
-                    <img src="assets/images/red_dead_2.jpg"
-                        class="featured-image">
-
-                    <div class="featured-info">
-
-                        <h3>Red Dead Redemption 2</h3>
-
-                        <p>Mundo abierto • Xbox</p>
-
-                    </div>
-
-                    <div class="featured-price">
-
-                        39.99€
-
-                    </div>
-
-                    <a href="catalogo.html"
-                        class="mini-btn">
-
-                        Ver
-
-                    </a>
-
-                </div>
-
-                <!-- JUEGO -->
-
-                <div class="featured-game">
-
-                    <img src="assets/images/Zelda.jpg"
-                        class="featured-image">
-
-                    <div class="featured-info">
-
-                        <h3>Zelda TOTK</h3>
-
-                        <p>Nintendo Switch</p>
-
-                    </div>
-
-                    <div class="featured-price">
-
-                        59.99€
-
-                    </div>
-
-                    <a href="catalogo.html"
-                        class="mini-btn">
-
-                        Ver
-
-                    </a>
-
-                </div>
+            <div id="featuredGames"
+                class="featured-games">
 
             </div>
 
@@ -453,14 +304,161 @@
 
     <script>
 
+        const API_URL =
+            "http://127.0.0.1:8000/games/";
+
+        const CART_API =
+            "http://127.0.0.1:8000/cart/";
+
         const contadorCarrito =
             document.getElementById("contadorCarrito");
 
-        let carrito =
-            JSON.parse(localStorage.getItem("carrito")) || [];
+        const featuredGames =
+            document.getElementById("featuredGames");
 
-        contadorCarrito.textContent =
-            carrito.length;
+        const token =
+            localStorage.getItem("token");
+
+        async function actualizarContadorCarrito() {
+
+            if (!token) {
+
+                contadorCarrito.textContent = 0;
+
+                return;
+
+            }
+
+            try {
+
+                const respuesta =
+                    await fetch(CART_API, {
+
+                        headers: {
+
+                            "Authorization":
+                                `Bearer ${token}`
+
+                        }
+
+                    });
+
+                if (!respuesta.ok) {
+
+                    contadorCarrito.textContent = 0;
+
+                    return;
+
+                }
+
+                const carrito =
+                    await respuesta.json();
+
+                contadorCarrito.textContent =
+                    carrito.items?.length || 0;
+
+            } catch (error) {
+
+                console.error(error);
+
+                contadorCarrito.textContent = 0;
+
+            }
+
+        }
+
+        async function cargarDestacados() {
+
+            try {
+
+                const respuesta =
+                    await fetch(API_URL);
+
+                const juegos =
+                    await respuesta.json();
+
+                /*
+                    Cogemos los primeros 5 juegos
+                */
+
+                const destacados =
+                    juegos.slice(0, 5);
+
+                mostrarDestacados(destacados);
+
+            } catch (error) {
+
+                console.error(error);
+
+                featuredGames.innerHTML = `
+
+                    <div class="text-red-400 text-xl text-center col-span-full">
+
+                        Error al cargar los juegos destacados.
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+        function mostrarDestacados(juegos) {
+
+            featuredGames.innerHTML = "";
+
+            juegos.forEach(juego => {
+
+                const precio =
+                    juego.price == 0
+                        ? "Gratis"
+                        : juego.price.toFixed(2) + "€";
+
+                const imagen =
+                    juego.image_url ||
+                    "assets/images/default.jpg";
+
+                featuredGames.innerHTML += `
+
+                    <div class="featured-game">
+
+                        <img src="${imagen}"
+                            alt="${juego.title}"
+                            class="featured-image">
+
+                        <div class="featured-info">
+
+                            <h3>${juego.title}</h3>
+
+                            <p>${juego.genre} • ${juego.platform}</p>
+
+                        </div>
+
+                        <div class="featured-price">
+
+                            ${precio}
+
+                        </div>
+
+                        <a href="producto.html?id=${juego.id}"
+                            class="mini-btn">
+
+                            Ver
+
+                        </a>
+
+                    </div>
+
+                `;
+
+            });
+
+        }
+
+        actualizarContadorCarrito();
+
+        cargarDestacados();
 
     </script>
 

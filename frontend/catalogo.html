@@ -115,7 +115,7 @@
 
     <section class="hero-section">
 
-        <div class="container-custom">
+        <div class="container-custom text-center flex flex-col items-center">
 
             <h1 class="hero-title">
 
@@ -129,7 +129,7 @@
 
             </h1>
 
-            <p class="hero-subtitle">
+            <p class="hero-subtitle max-w-3xl mx-auto">
 
                 Descubre los títulos más vendidos,
                 lanzamientos recientes y experiencias épicas
@@ -174,13 +174,6 @@
             </button>
 
             <button class="filtro filtro-secundario"
-                data-filtro="PlayStation 5">
-
-                PlayStation 5
-
-            </button>
-
-            <button class="filtro filtro-secundario"
                 data-filtro="PC">
 
                 PC
@@ -188,23 +181,16 @@
             </button>
 
             <button class="filtro filtro-secundario"
-                data-filtro="Nintendo Switch">
+                data-filtro="PlayStation 5">
 
-                Nintendo Switch
-
-            </button>
-
-            <button class="filtro filtro-secundario"
-                data-filtro="Xbox">
-
-                Xbox
+                PlayStation 5
 
             </button>
 
             <button class="filtro filtro-secundario"
-                data-filtro="Multiplataforma">
+                data-filtro="PlayStation 4">
 
-                Multiplataforma
+                PlayStation 4
 
             </button>
 
@@ -289,7 +275,13 @@
     <script>
 
         const API_URL =
-            "http://127.0.0.1:8000/games";
+            "http://127.0.0.1:8000/games/";
+
+        const API_CART =
+            "http://127.0.0.1:8000/cart/";
+
+        const token =
+            localStorage.getItem("token");
 
         const gridJuegos =
             document.getElementById("gridJuegos");
@@ -303,63 +295,64 @@
         const botonesFiltro =
             document.querySelectorAll(".filtro");
 
-        let carrito =
-            JSON.parse(localStorage.getItem("carrito")) || [];
+        /* =========================
+           CONTADOR CARRITO
+        ========================== */
 
-        contadorCarrito.textContent =
-            carrito.length;
+        async function actualizarContadorCarrito() {
 
-        const imagenes = {
+            if (!token) {
 
-            "Cyberpunk 2077":
-                "assets/images/cyberpunk.jpg",
+                contadorCarrito.textContent = 0;
 
-            "Elden Ring":
-                "assets/images/elden_ring.jpg",
+                return;
 
-            "GTA V":
-                "assets/images/gta_v.jpg",
+            }
 
-            "Zelda TOTK":
-                "assets/images/Zelda.jpg",
+            try {
 
-            "Red Dead Redemption 2":
-                "assets/images/red_dead_2.jpg",
+                const respuesta =
+                    await fetch(API_CART, {
 
-            "Hogwarts Legacy":
-                "assets/images/Hogwarts.jpg",
+                        headers: {
 
-            "The Witcher 3":
-                "assets/images/the_witcher_3.jpg",
+                            "Authorization":
+                                `Bearer ${token}`
 
-            "Spider-Man 2":
-                "assets/images/spiderman_2.jpg",
+                        }
 
-            "God of War Ragnarök":
-                "assets/images/god_of_war.jpg",
+                    });
 
-            "Minecraft":
-                "assets/images/Minecraft.jpg",
+                if (!respuesta.ok) {
 
-            "Fortnite":
-                "assets/images/Fortnite.jpg",
+                    throw new Error(
+                        "Error cargando carrito"
+                    );
 
-            "Call of Duty Black Ops 6":
-                "assets/images/call_of_duty.jpg",
+                }
 
-            "Mario Kart 8 Deluxe":
-                "assets/images/mario_kart_8.jpg",
+                const carrito =
+                    await respuesta.json();
 
-            "League of Legends":
-                "assets/images/league_of_legends.jpg",
+                const cantidad =
+                    carrito.items
+                        ? carrito.items.length
+                        : 0;
 
-            "Valorant":
-                "assets/images/Valorant.jpg",
+                contadorCarrito.textContent =
+                    cantidad;
 
-            "EA Sports FC 26":
-                "assets/images/ea_sports.jpg"
+            } catch (error) {
 
-        };
+                console.error(error);
+
+                contadorCarrito.textContent = 0;
+
+            }
+
+        }
+
+        actualizarContadorCarrito();
 
         let juegosOriginales = [];
 
@@ -424,7 +417,7 @@
             juegos.forEach(juego => {
 
                 const imagen =
-                    imagenes[juego.title] ||
+                    juego.image_url ||
                     "assets/images/default.jpg";
 
                 const precio =
@@ -441,6 +434,7 @@
                         <div class="overflow-hidden">
 
                             <img src="${imagen}"
+                                alt="${juego.title}"
                                 class="w-full h-72 object-cover hover:scale-110 transition duration-500">
 
                         </div>
@@ -451,7 +445,7 @@
 
                             <div class="mb-5">
 
-                                <h2 class="text-3xl font-black mb-3">
+                                <h2 class="text-2xl font-black mb-3 leading-tight">
 
                                     ${juego.title}
 
@@ -459,7 +453,7 @@
 
                                 <p class="text-slate-400 mb-2">
 
-                                    ${juego.platform}
+                                    🎮 ${juego.platform}
 
                                 </p>
 
@@ -475,7 +469,7 @@
 
                                 <div class="flex justify-between items-center mb-6">
 
-                                    <span class="text-blue-400 text-4xl font-black">
+                                    <span class="text-blue-400 text-3xl font-black">
 
                                         ${precio}
 
@@ -489,12 +483,16 @@
 
                                 </div>
 
-                                <a href="producto.html?id=${juego.id}"
-                                    class="btn-primary w-full">
+                                <div class="flex flex-col gap-4">
 
-                                    Ver videojuego
+                                    <a href="producto.html?id=${juego.id}"
+                                        class="btn-primary w-full text-center">
 
-                                </a>
+                                        Ver videojuego
+
+                                    </a>
+
+                                </div>
 
                             </div>
 
@@ -548,7 +546,12 @@
                 juegosOriginales.filter(juego => {
 
                     const coincideBusqueda =
-                        juego.title.toLowerCase().includes(texto);
+
+                        juego.title.toLowerCase().includes(texto) ||
+
+                        juego.genre.toLowerCase().includes(texto) ||
+
+                        juego.platform.toLowerCase().includes(texto);
 
                     const coincideFiltro =
 

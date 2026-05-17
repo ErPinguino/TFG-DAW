@@ -28,16 +28,12 @@
 
         <div class="container-custom">
 
-            <!-- LOGO -->
-
             <a href="index.html"
                 class="logo">
 
                 GameStore
 
             </a>
-
-            <!-- MENÚ -->
 
             <ul class="nav-menu">
 
@@ -129,8 +125,6 @@
 
         <div class="container-custom">
 
-            <!-- PERFIL -->
-
             <div class="glass-card p-10 md:p-14 max-w-6xl mx-auto">
 
                 <!-- TOP -->
@@ -170,7 +164,7 @@
                         <p id="email"
                             class="text-slate-400 text-2xl">
 
-                            email@email.com
+                            usuario@email.com
 
                         </p>
 
@@ -273,7 +267,7 @@
 
                     </a>
 
-                    <!-- CATALOGO -->
+                    <!-- CATÁLOGO -->
 
                     <a href="catalogo.html"
                         class="profile-action-card">
@@ -332,8 +326,6 @@
 
         <div class="container-custom footer-content">
 
-            <!-- INFO -->
-
             <div>
 
                 <h3 class="logo mb-3">
@@ -349,8 +341,6 @@
                 </p>
 
             </div>
-
-            <!-- LINKS -->
 
             <div class="footer-links">
 
@@ -391,19 +381,26 @@
     <script>
 
         /* =========================
+           APIS
+        ========================== */
+
+        const API_PROFILE =
+            "http://127.0.0.1:8000/auth/me";
+
+        const API_ORDERS =
+            "http://127.0.0.1:8000/orders/me";
+
+        const API_CART =
+            "http://127.0.0.1:8000/cart/";
+
+        /* =========================
            TOKEN
         ========================== */
 
         const token =
             localStorage.getItem("token");
 
-        /* =========================
-           VALIDAR LOGIN
-        ========================== */
-
         if (!token) {
-
-            alert("Debes iniciar sesión");
 
             window.location.href =
                 "login.html";
@@ -433,63 +430,84 @@
             document.getElementById("juegosCarrito");
 
         /* =========================
-           CARRITO
+           USUARIO LOCAL
         ========================== */
 
-        const carrito =
-            JSON.parse(localStorage.getItem("carrito")) || [];
+        const usuarioLocal =
+            JSON.parse(localStorage.getItem("usuario"));
 
-        contadorCarrito.textContent =
-            carrito.length;
+        if (usuarioLocal) {
 
-        juegosCarrito.textContent =
-            carrito.length;
+            usernameElement.textContent =
+                usuarioLocal.username || "Usuario";
+
+            emailElement.textContent =
+                usuarioLocal.email || "Sin email";
+
+            avatarLetter.textContent =
+                (usuarioLocal.username || "U")
+                    .charAt(0)
+                    .toUpperCase();
+
+        }
 
         /* =========================
-           DECODIFICAR JWT
+           CARGAR PERFIL
         ========================== */
 
-        function parseJwt(token) {
+        async function cargarPerfil() {
 
             try {
 
-                return JSON.parse(
-                    atob(token.split('.')[1])
+                const respuesta =
+                    await fetch(API_PROFILE, {
+
+                        headers: {
+
+                            "Authorization":
+                                `Bearer ${token}`
+
+                        }
+
+                    });
+
+                if (!respuesta.ok) {
+
+                    throw new Error(
+                        "No se pudo cargar el perfil"
+                    );
+
+                }
+
+                const usuario =
+                    await respuesta.json();
+
+                usernameElement.textContent =
+                    usuario.username || "Usuario";
+
+                emailElement.textContent =
+                    usuario.email || "Sin email";
+
+                avatarLetter.textContent =
+                    (usuario.username || "U")
+                        .charAt(0)
+                        .toUpperCase();
+
+                localStorage.setItem(
+                    "usuario",
+                    JSON.stringify(usuario)
                 );
 
-            } catch {
+            } catch (error) {
 
-                return null;
+                console.error(error);
 
             }
 
         }
 
-        const usuario =
-            parseJwt(token);
-
         /* =========================
-           MOSTRAR DATOS
-        ========================== */
-
-        if (usuario) {
-
-            const username =
-                usuario.sub || "Usuario";
-
-            usernameElement.textContent =
-                username;
-
-            emailElement.textContent =
-                usuario.email || "Sin email";
-
-            avatarLetter.textContent =
-                username.charAt(0).toUpperCase();
-
-        }
-
-        /* =========================
-           PEDIDOS
+           CARGAR PEDIDOS
         ========================== */
 
         async function cargarPedidos() {
@@ -497,17 +515,24 @@
             try {
 
                 const respuesta =
-                    await fetch(
-                        "http://127.0.0.1:8000/orders/me",
-                        {
-                            headers: {
-                                "Authorization":
-                                    `Bearer ${token}`
-                            }
+                    await fetch(API_ORDERS, {
+
+                        headers: {
+
+                            "Authorization":
+                                `Bearer ${token}`
+
                         }
+
+                    });
+
+                if (!respuesta.ok) {
+
+                    throw new Error(
+                        "No se pudieron cargar pedidos"
                     );
 
-                if (!respuesta.ok) return;
+                }
 
                 const pedidos =
                     await respuesta.json();
@@ -518,6 +543,60 @@
             } catch (error) {
 
                 console.error(error);
+
+            }
+
+        }
+
+        /* =========================
+           CARGAR CARRITO
+        ========================== */
+
+        async function cargarCarrito() {
+
+            try {
+
+                const respuesta =
+                    await fetch(API_CART, {
+
+                        headers: {
+
+                            "Authorization":
+                                `Bearer ${token}`
+
+                        }
+
+                    });
+
+                if (!respuesta.ok) {
+
+                    throw new Error(
+                        "No se pudo cargar carrito"
+                    );
+
+                }
+
+                const carrito =
+                    await respuesta.json();
+
+                const cantidad =
+                    carrito.items
+                        ? carrito.items.length
+                        : 0;
+
+                contadorCarrito.textContent =
+                    cantidad;
+
+                juegosCarrito.textContent =
+                    cantidad;
+
+            } catch (error) {
+
+                console.error(error);
+
+                contadorCarrito.textContent = 0;
+
+                juegosCarrito.textContent = 0;
 
             }
 
@@ -536,6 +615,8 @@
 
             localStorage.removeItem("token");
 
+            localStorage.removeItem("usuario");
+
             localStorage.removeItem("carrito");
 
             window.location.href =
@@ -547,7 +628,11 @@
            INICIAR
         ========================== */
 
+        cargarPerfil();
+
         cargarPedidos();
+
+        cargarCarrito();
 
     </script>
 
